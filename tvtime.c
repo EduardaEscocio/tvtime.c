@@ -2,6 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct usuario{
+    char login[50];
+    char senha[50];
+    char nome[50];
+    int admin; // 0 - comun - 1 admin
+} User;
+
+typedef struct filme{
+    char nome[50];
+    char duracao[50];
+    char genero[50];
+    int ano;
+}Filme;
+
+char adicionarFilme(){
+    Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
+}
 
 
 // TV Time
