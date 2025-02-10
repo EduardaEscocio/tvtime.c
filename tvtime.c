@@ -6,7 +6,7 @@ typedef struct usuario{
     char login[50];
     char senha[50];
     char nome[50];
-    int admin; // 0 - comun - 1 admin
+    int adminId; // 0 - comun - 1 admin
 } User;
 
 typedef struct filme{
@@ -17,7 +17,19 @@ typedef struct filme{
 }Filme;
 
 char adicionarFilme(){
+    FILE *portfolio;
     Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
+    printf("Nome: ");
+    scanf(" %s", novoFilme->nome);
+    printf("Duração: ");
+    scanf(" %s", novoFilme->duracao);
+    printf("Gênero: ");
+    scanf("%s", novoFilme->genero);
+    printf("Ano de lançamento: ");
+    scanf("%d", &novoFilme->ano);
+    portfolio = fopen("portfolio.txt", "w");
+    
+    
 }
 
 
