@@ -16,22 +16,40 @@ typedef struct filme{
     int ano;
 }Filme;
 
+FILE *portfolio;
+char ch;
 char adicionarFilme(){
-    FILE *portfolio;
+    char nomeFilmeAtual[50];
     Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
     printf("Nome: ");
-    scanf(" %s", novoFilme->nome);
-    printf("Duração: ");
-    scanf(" %s", novoFilme->duracao);
-    printf("Gênero: ");
-    scanf("%s", novoFilme->genero);
-    printf("Ano de lançamento: ");
-    scanf("%d", &novoFilme->ano);
-    portfolio = fopen("portfolio.txt", "w");
-    
-    
+    scanf(" %s", nomeFilmeAtual);
+    strcpy(novoFilme->nome, nomeFilmeAtual);
+    // printf("Duração: ");
+    // scanf(" %s", novoFilme->duracao);
+    // printf("Gênero: ");
+    // scanf("%s", novoFilme->genero);
+    // printf("Ano de lançamento: ");
+    // scanf("%d", &novoFilme->ano);
+    // portfolio = fopen("portfolio.txt", "w");
+    while( (ch = getchar()) != EOF) {
+        putc(ch,portfolio);
+      }
+      fclose(portfolio);
 }
 
+char lerPortfolio(){
+    portfolio = fopen("portfolio.txt", "r");
+
+      while((ch = getc(portfolio) != EOF))
+        printf("%c",ch);
+        
+      fclose(portfolio);
+      }
+
+int main(){
+    adicionarFilme();
+    lerPortfolio();
+}
 
 // TV Time
 // O usuário pode fazer as seguintes funcionalidades:
