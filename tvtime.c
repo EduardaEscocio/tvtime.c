@@ -18,31 +18,29 @@ typedef struct filme{
 
 FILE *portfolio;
 char ch;
-char adicionarFilme(){
+void adicionarFilme(){
     char nomeFilmeAtual[50];
     Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
     printf("Nome: ");
-    scanf(" %s", nomeFilmeAtual);
+    scanf(" %[^\n]", nomeFilmeAtual);
     strcpy(novoFilme->nome, nomeFilmeAtual);
-    // printf("Duração: ");
-    // scanf(" %s", novoFilme->duracao);
-    // printf("Gênero: ");
-    // scanf("%s", novoFilme->genero);
-    // printf("Ano de lançamento: ");
-    // scanf("%d", &novoFilme->ano);
-    // portfolio = fopen("portfolio.txt", "w");
-    while( (ch = getchar()) != EOF) {
-        putc(ch,portfolio);
-      }
-      fclose(portfolio);
+    portfolio = fopen("portfolio.txt", "a");
+    printf("Duração: ");
+    scanf(" %[^\n]", novoFilme->duracao);
+    printf("Gênero: ");
+    scanf(" %[^\n]", novoFilme->genero);
+    printf("Ano de lançamento: ");
+    scanf("%d", &novoFilme->ano);
+    fprintf(portfolio, "Nome: %s | Duração: %s | Gênero: %s | Ano de Lançamento: %d\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
+    fclose(portfolio);
 }
 
-char lerPortfolio(){
+void lerPortfolio(){
     portfolio = fopen("portfolio.txt", "r");
 
-      while((ch = getc(portfolio) != EOF))
+      while((ch = getc(portfolio) != EOF)){
         printf("%c",ch);
-        
+      }
       fclose(portfolio);
       }
 
