@@ -14,17 +14,53 @@ typedef struct filme{
     char duracao[50];
     char genero[50];
     int ano;
+    struct filme *ant;
+    struct filme *prox;
 }Filme;
+
+typedef struct filmesAssistidos{
+    Filme *filme;
+}filmesAssistidos;
 
 FILE *portfolio;
 char ch;
+
+int menuPrincipal(){
+    int opcaoMenu;
+    printf("\033[0;36m");
+    printf("Menu: \n");
+    printf("[1] - Adicionar filme \n");
+    printf("[2] - Adicionar filme como assistido \n");
+    printf("[3] - Adicionar novo usuário\n");
+    printf("[4] - Login\n")
+    printf("[0] - Sair\n");
+    printf("\033[0m");
+    printf("Opção: ");
+    
+    scanf("%d", &opcaoMenu);
+    return opcaoMenu;
+}
+
+int menuAdmin(){
+    int opcaoMenu;
+    printf("\033[0;36m");
+    printf("Menu: \n");
+    printf("[1] - Adicionar novo filme \n");
+    printf("[0] - Sair\n");
+    printf("\033[0m");
+    printf("Opção: ");
+    
+    scanf("%d", &opcaoMenu);
+    return opcaoMenu;
+}
+
 void adicionarFilme(){
     char nomeFilmeAtual[50];
     Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
     printf("Nome: ");
     scanf(" %[^\n]", nomeFilmeAtual);
     strcpy(novoFilme->nome, nomeFilmeAtual);
-    portfolio = fopen("portfolio.txt", "a");
+    portfolio = fopen("portfolio.txt", "r+");
     printf("Duração: ");
     scanf(" %[^\n]", novoFilme->duracao);
     printf("Gênero: ");
@@ -33,18 +69,51 @@ void adicionarFilme(){
     scanf("%d", &novoFilme->ano);
     fprintf(portfolio, "Nome: %s | Duração: %s | Gênero: %s | Ano de Lançamento: %d\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
     fclose(portfolio);
+    printf("O filme foi adicionado com sucesso!\n");
 }
 
 void lerPortfolio(){
     portfolio = fopen("portfolio.txt", "r");
 
-      while((ch = getc(portfolio) != EOF)){
+      while(1){
+        ch = fgetc(portfolio);
+        if(ch == EOF){
+          break;
+        }
         printf("%c",ch);
       }
       fclose(portfolio);
       }
 
+    
+void filmeAssistido(){
+    char nomeFilme[50];
+    printf("Qual o nome do filme que você quer adicionar como assistido? ");
+    scanf(" %[^\n]", nomeFilme);
+    portfolio = fopen("portfolio.txt", "r");
+    while(1){
+        filme = fgetc(portfolio);
+        if(ch == EOF){
+            printf("Filme não disponível no catálogo");
+            break;
+        }
+        if(strcmp(nomeFilme, filme) == 0){
+            printf("Filme encontrado e registrado");
+        }
+    }
+
+}
 int main(){
+    menu();
+    if(menu() == 1){
+        adicionarFilme();
+    }
+    else if(menu() == 2){
+        filmeAssistido();
+    }
+    else{
+        return 0;
+    }
     adicionarFilme();
     lerPortfolio();
 }
