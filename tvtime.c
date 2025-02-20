@@ -20,16 +20,17 @@ typedef struct filme{
     char duracao[50];
     char genero[50];
     int ano;
-}Filme;
+} Filme;
 
-typedef struct filmesAssistidos{
-    Filme *filme;
-}filmesAssistidos;
+// typedef struct filmesAssistidos{
+//     usuario
+//     Filme *filme;
+// }filmesAssistidos;
 
-FILE *portfolio;
 char ch;
 int opcaoMenu = 9;
-void cadastro(){
+
+void cadastro(FILE *usuarios){
     char nome[50];
     char login[50];
     char senha[50];
@@ -65,14 +66,12 @@ void cadastro(){
     free(novoUsuario);
     printf("O usuario foi registrado com sucesso!\n");
     limparBuffer();
-
 }
 
 // void login(){
 //     char login_atual[50];
 //     printf("Digite seu login: \n");
 //     scanf("[^\n]s", login_atual);
-
 
 // }
 
@@ -102,8 +101,9 @@ int menuAdmin(){
     scanf("%d", &opcaoMenuAdmin);
     return opcaoMenuAdmin;
 }
+
 //Função para adicionar um filme ao catálogo (ADMIN)
-void adicionarFilme(){
+void adicionarFilme(FILE *portfolio){
     char nomeFilmeAtual[50];
     Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
     if(novoFilme == NULL){
@@ -125,16 +125,15 @@ void adicionarFilme(){
         return;
     }
     fprintf(portfolio, "%s | %s | %s | %d |\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
-    fclose(portfolio);
     free(novoFilme);
     printf("O filme foi adicionado com sucesso no catálogo!\n");
     limparBuffer();
 }
-// Função para ler o catálogo de filmes (QUALQUER USUÁRIO)
-void lerPortfolio(){
-    // portfolio = fopen("portfolio.txt", "r");
 
-      while(1){
+// Função para ler o catálogo de filmes (QUALQUER USUÁRIO)
+void lerPortfolio(FILE *portfolio){
+    rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
+    while(1){
         ch = fgetc(portfolio);
         if(ch == EOF){
             break;
@@ -144,7 +143,7 @@ void lerPortfolio(){
 }
 
 // ADICIONAR FILME COMO ASSISTIDO E NAS ESTATISTICAS (USUÁRIO COMUM)
-void filmeAssistido(){
+void filmeAssistido(FILE *portfolio){
     int encontrado = 0;
     char linha[256];
     char nomeFilme[50];
@@ -152,7 +151,7 @@ void filmeAssistido(){
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     limparBuffer();
     scanf(" %[^\n]s", nomeFilme); // de novo o %s
-    // portfolio = fopen("portfolio.txt", "r");
+    rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
     //Função que percorre com 2 for para encontrar o filme e adicionar na lista de filmes assistidos, comparando letra a letra e atualizando a letra sempre.
     while(fgets(linha, sizeof(linha), portfolio)){
         if(strstr(linha, nomeFilme) != NULL){
@@ -163,12 +162,15 @@ void filmeAssistido(){
     if(encontrado >= 1){
         printf("Filme encontrado\n");
     }
-    // fclose(portfolio);
 }
 
 int main(){
-    //Precisa dar um jeito de só abrir o arquivo na main e a função continuar funcionando
-    FILE *portfolio = fopen("portfolio.txt", "a");
+    FILE *portfolio = fopen("portfolio.txt", "a+"); // Abre o arquivo para leitura e escrita
+    if (portfolio == NULL) {
+        printf("Erro ao abrir o arquivo portfolio.txt\n");
+        return 1;
+    }
+
     while(opcaoMenu != 0){
         menuPrincipal();
         if(opcaoMenu == 1){
@@ -176,44 +178,14 @@ int main(){
         }
         // else if(opcaoMenu == 2){
         //     login();
-            
         // }
         else if(opcaoMenu == 3){
-            lerPortfolio();
+            lerPortfolio(portfolio);
         }
         else if(opcaoMenu == 4){
-            adicionarFilme();
+            adicionarFilme(portfolio);
         }
     }
-    fclose(portfolio);
-
+    fclose(portfolio); // Fecha o arquivo apenas no final do programa
+    return 0;
 }
-
-// TV Time
-// O usuário pode fazer as seguintes funcionalidades:
-// 1) Cadastro e Login: Os dados requisitados para o usuário devem ser pelo
-// menos um login e uma senha, mas podem ser requisitadas outras
-// informações adicionais. Ex:
-// Cadastro:
-// Login: rafaelivo
-// Senha: *****
-// Nome: Rafael
-// 2) Cadastro de filmes: Um usuário especial (administrador) pode cadastrar filmes novos. Cada filme deve conter
-// diversas informações, mas o mínimo deve ser: nome, tempo de duração, gênero. Ex:
-// Cadastro de filme:
-// Nome: The Matrix
-// Duração: 2:16
-// Gênero: Ficcção científica
-// Ano de lançamento: 1999
-// 3) Assistiu filme: Um usuário comum pode inserir que assistiu um dos filmes cadastrado na aplicação. Ex:
-// Eu assisti o filme:
-// Nome: Esqueceram de Mim
-// Onde: Netflix
-// Quando: 25/12/2024
-// 4) Listar meus filmes assistidos: Um usuário comum pode exibir todos os filmes que ele cadastrou. Ex:
-// Filmes que assisti:
-// Esqueceram de Mim (Ano de lançamento: 1990, Duração: 1h43min, Assistido: 25/12/2024 em Netflix)
-// Homem de Ferro (Ano de lançamento: 2008, Duração: 2h6min, Assistido: 25/01/2025 em Disney+)
-// The Matrix (Ano de lançamento: 1999, Duração: 2h16min, Assistido: 01/02/2025 em HBO Max)
-// 5) Estatísticas: O usuário pode visualizar estatísticas sobre os filmes que assistiu. Uma delas deve ser o tempo total dos
-// filmes assistidos
