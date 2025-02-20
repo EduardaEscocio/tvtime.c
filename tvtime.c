@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // Função para limpar o buffer do teclado
 void limparBuffer() {
@@ -30,8 +31,16 @@ typedef struct filme{
 char ch;
 int opcaoMenu = 9;
 
-int nomeValido(nome){
-    
+bool loginValido(char *login){
+    for(int i = 0; i < strlen(login); i++){
+        if(login[i] == ' '){
+            printf("Login inválido! Tente novamente.\n");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }
 
 void cadastro(FILE *usuarios){
@@ -46,21 +55,18 @@ void cadastro(FILE *usuarios){
         return;
     }
     //SE CERTIFICAR DE QUE O USUÁRIO NÃO VAI TENTAR CADASTRAR COM UM LOGIN QUE JA EXISTE (GUSTAVO)
-    printf("Nome: \n");
+    printf("login: \n");
     do {
-        scanf(" %[^\n]s", nome);
-    } while{
-        !nomeValido;
-    }
+        scanf(" %[^\n]s", login);
+    } while(!loginValido);
     
-    strcpy(novoUsuario->nome, nome);
-    printf("Login: \n");
-    scanf(" %[^\n]s", login);
     strcpy(novoUsuario->login, login);
+    printf("Nome: \n");
+    scanf(" %[^\n]s", nome);
+    strcpy(novoUsuario->nome, nome);
     printf("Senha: \n");
     scanf(" %[^\n]s", senha);
     strcpy(novoUsuario->senha, senha);
-    FILE *usuarios = fopen("usuarios.txt", "a");
     if(usuarios == NULL){
         printf("Erro ao abrir o arquivo");
         free(novoUsuario);
@@ -179,6 +185,7 @@ void filmeAssistido(FILE *portfolio){
 }
 
 int main(){
+    FILE *usuarios = fopen("usuarios.txt", "a+");
     FILE *portfolio = fopen("portfolio.txt", "a+"); // Abre o arquivo para leitura e escrita
     if (portfolio == NULL) {
         printf("Erro ao abrir o arquivo portfolio.txt\n");
@@ -188,7 +195,7 @@ int main(){
     while(opcaoMenu != 0){
         menuPrincipal();
         if(opcaoMenu == 1){
-            cadastro();
+            cadastro(usuarios);
         }
         // else if(opcaoMenu == 2){
         //     login();
