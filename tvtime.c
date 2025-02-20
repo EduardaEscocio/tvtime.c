@@ -45,7 +45,6 @@ void cadastro(){
     scanf(" %[^\n]s", nome); // falta o %s
     strcpy(novoUsuario->nome, nome);
     printf("Login: \n");
-    scanf(" %[^\n]", login);
     scanf(" %[^\n]s", login);
     strcpy(novoUsuario->login, login);
     printf("Senha: \n");
