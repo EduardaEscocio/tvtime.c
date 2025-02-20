@@ -30,6 +30,10 @@ typedef struct filme{
 char ch;
 int opcaoMenu = 9;
 
+int nomeValido(nome){
+    
+}
+
 void cadastro(FILE *usuarios){
     char nome[50];
     char login[50];
@@ -41,9 +45,14 @@ void cadastro(FILE *usuarios){
         printf("Erro ao alocar memória");
         return;
     }
-
+    //SE CERTIFICAR DE QUE O USUÁRIO NÃO VAI TENTAR CADASTRAR COM UM LOGIN QUE JA EXISTE (GUSTAVO)
     printf("Nome: \n");
-    scanf(" %[^\n]s", nome); // falta o %s
+    do {
+        scanf(" %[^\n]s", nome);
+    } while{
+        !nomeValido;
+    }
+    
     strcpy(novoUsuario->nome, nome);
     printf("Login: \n");
     scanf(" %[^\n]s", login);
@@ -68,12 +77,19 @@ void cadastro(FILE *usuarios){
     limparBuffer();
 }
 
-// void login(){
-//     char login_atual[50];
-//     printf("Digite seu login: \n");
-//     scanf("[^\n]s", login_atual);
+void login(){
+    //Essa função precisa buscar o usuário para logar e buscar suas estatísticas ou adicionar novos filmes assistidos;
+    char login_atual[50];
+    char senha_atual[50];
+    printf("Digite seu login: \n");
+    scanf("%[^\n]s", login_atual);
+    printf("Digite sua senha: \n");
+    scanf("%[^\n]s", senha_atual);
 
-// }
+
+
+
+}
 
 int menuPrincipal(){
     printf("\033[0;36m");
@@ -104,15 +120,13 @@ int menuAdmin(){
 
 //Função para adicionar um filme ao catálogo (ADMIN)
 void adicionarFilme(FILE *portfolio){
-    char nomeFilmeAtual[50];
     Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
     if(novoFilme == NULL){
         printf("Erro ao alocar memória");
         return;
     }
     printf("Nome: ");
-    scanf(" %[^\n]s", nomeFilmeAtual);
-    strcpy(novoFilme->nome, nomeFilmeAtual);
+    scanf(" %[^\n]s", novoFilme->nome);
     printf("Duração: ");
     scanf(" %[^\n]s", novoFilme->duracao); // dar um jeito de adicionar o : caso o usuário digite apenas numeros, formato ideal = HM:SmS
     printf("Gênero: ");
