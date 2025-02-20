@@ -32,34 +32,34 @@ FILE *portfolio;
 char ch;
 int opcaoMenu = 9;
 //COPIEI A FUNÇÃO DE ADD FILME AQUI, TEM QUE ARRUMAR
-void login(){
-    User * novoUsuario = (User*)malloc(sizeof(User));
-    if(novoFilme == NULL){
-        printf("Erro ao alocar memória");
-        return;
-    }
-    printf("Nome: ");
-    scanf(" %[^\n]", nomeFilmeAtual);
-    strcpy(novoFilme->nome, nomeFilmeAtual);
-    printf("Duração: ");
-    scanf(" %[^\n]", novoFilme->duracao);
-    printf("Gênero: ");
-    scanf(" %[^\n]", novoFilme->genero);
-    printf("Ano de lançamento: ");
-    scanf("%d", &novoFilme->ano);
-    FILE *portfolio = fopen("portfolio.txt", "a");
-    if(portfolio == NULL){
-        printf("Erro ao abrir o arquivo");
-        free(novoFilme);
-        return;
-    }
-    fprintf(portfolio, "%s | %s | %s | %d |\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
-    fclose(portfolio);
-    free(novoFilme);
-    printf("O filme foi adicionado com sucesso no catálogo!\n");
-    limparBuffer();
+// void login(){
+//     User * novoUsuario = (User*)malloc(sizeof(User));
+//     if(novoFilme == NULL){
+//         printf("Erro ao alocar memória");
+//         return;
+//     }
+//     printf("Nome: ");
+//     scanf(" %[^\n]", nomeFilmeAtual);
+//     strcpy(novoFilme->nome, nomeFilmeAtual);
+//     printf("Duração: ");
+//     scanf(" %[^\n]", novoFilme->duracao);
+//     printf("Gênero: ");
+//     scanf(" %[^\n]", novoFilme->genero);
+//     printf("Ano de lançamento: ");
+//     scanf("%d", &novoFilme->ano);
+//     FILE *portfolio = fopen("portfolio.txt", "a");
+//     if(portfolio == NULL){
+//         printf("Erro ao abrir o arquivo");
+//         free(novoFilme);
+//         return;
+//     }
+//     fprintf(portfolio, "%s | %s | %s | %d |\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
+//     fclose(portfolio);
+//     free(novoFilme);
+//     printf("O filme foi adicionado com sucesso no catálogo!\n");
+//     limparBuffer();
 
-}
+// }
 
 int menuPrincipal(){
     printf("\033[0;36m");
@@ -135,29 +135,19 @@ void lerPortfolio(){
 // ADICIONAR FILME COMO ASSISTIDO E NAS ESTATISTICAS (USUÁRIO COMUM)
 void filmeAssistido(){
     char nomeFilme[50];
-    char procuraFilme;
+    char procuraFilme[50];
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     scanf(" %[^\n]", nomeFilme);
     portfolio = fopen("portfolio.txt", "r");
     //Função que percorre com 2 for para encontrar o filme e adicionar na lista de filmes assistidos, comparando letra a letra e atualizando a letra sempre.
-    while(1){
-        for(int i = 0; i < strlen(nomeFilme); i++){
-            procuraFilme = fgetc(portfolio);
-            for(int j = 0; j < strlen(nomeFilme); j++){
-                if(procuraFilme != nomeFilme[i]){
-                    break;
-                }
-                else{
-                    printf("Filme encontrado e registrado");
-                    break;
-                }
+    while(fgets(linha, sizeof(linha), arquivo)){
 
-            }
-        }
     }
-    fclose(portfolio);
-    limparBuffer();
-}
+        
+        }
+        fclose(portfolio);
+        limparBuffer();
+    
 
     //     strcpy(procuraFilme, fgets(procuraFilme, 50, portfolio));
     //     if(strcmp(nomeFilme, procuraFilme) == 0){
@@ -184,7 +174,7 @@ while(opcaoMenu != 0){
         filmeAssistido();
     }
     else if(opcaoMenu == 4){
-        login();
+        // login();
     }
 }
 }
