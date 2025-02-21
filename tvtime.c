@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include <ctype.h>
 // Função para limpar o buffer do teclado
 void limparBuffer() {
     int c;
@@ -32,8 +32,7 @@ char ch;
 int opcaoMenu = 9;
 
 bool loginValido(char *login){
-    for(int i = 0; i < strlen(login); i++){
-        if(login[i] == ' '){
+        if(isspace(*login)!=0){
             printf("Login inválido! Tente novamente.\n");
             return false;
         }
@@ -41,11 +40,11 @@ bool loginValido(char *login){
             return true;
         }
     }
-}
+
 
 void cadastro(FILE *usuarios){
     char nome[50];
-    char login[50];
+    char *login = malloc(sizeof(*login));
     char senha[50];
     int ch;
     //validação de dados de login e senha necessario;
