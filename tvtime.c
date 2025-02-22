@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "menus.h"
 #include "users.h"
 #include "filmes.h"
@@ -41,7 +41,6 @@ int main() {
         free(loginUsuario);
     }
 
-    fclose(usuarios);
     fclose(estatisticas);
     fclose(portfolio);
     return 0;

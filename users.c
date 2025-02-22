@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 #include "users.h"
 #include "utils.h"
 
@@ -10,7 +10,7 @@ int loginExiste(FILE *usuarios, char *login) {
     rewind(usuarios); // Volta ao início do arquivo
     while (fgets(linha, sizeof(linha), usuarios)) {
         char loginArquivo[50];
-        sscanf(linha, "%[^|]| %[^|] |%[^|]", loginArquivo); // Extrai o login do arquivo
+        sscanf(linha, "%[^|]|", loginArquivo); // Extrai o login do arquivo
         if (strcmp(loginArquivo, login) == 0) {
             return 1; // Login já existe
         }
@@ -28,7 +28,7 @@ int loginValido(char *login) {
 }
 
 void cadastro(FILE *usuarios) {
-    User novoUsuario;
+    User *novoUsuario = malloc(sizeof(User));
     char nome[50];
     char login[50];
     char senha[50];
@@ -43,27 +43,29 @@ void cadastro(FILE *usuarios) {
         }
     } while (loginValido(login) || loginExiste(usuarios, login));
 
-    strcpy(novoUsuario.login, login);
+    strcpy(novoUsuario->login, login);
 
     printf("Nome: ");
     scanf(" %[^\n]", nome);
-    strcpy(novoUsuario.nome, nome);
+    strcpy(novoUsuario->nome, nome);
 
     printf("Senha: ");
     scanf(" %[^\n]", senha);
-    strcpy(novoUsuario.senha, senha);
+    strcpy(novoUsuario->senha, senha);
 
     // Verifica se o arquivo está vazio para definir o admin
     rewind(usuarios);
     if (fgetc(usuarios) == EOF) {
-        novoUsuario.adminId = 1; // Primeiro usuário é admin
+        novoUsuario->adminId = 1; // Primeiro usuário é admin
     } else {
-        novoUsuario.adminId = 0; // Usuário comum
+        novoUsuario->adminId = 0; // Usuário comum
     }
 
     // Escreve o novo usuário no arquivo
-    fprintf(usuarios, "%s | %s | %s | %d\n", novoUsuario.nome, novoUsuario.login, novoUsuario.senha, novoUsuario.adminId);
+    fprintf(usuarios, "%s | %s | %s | %d\n", novoUsuario->nome, novoUsuario->login, novoUsuario->senha, novoUsuario->adminId);
     printf("Usuário registrado com sucesso!\n");
+    free(novoUsuario);
+    fclose(usuarios);
 }
 
 char* login(FILE *usuarios) {
@@ -123,7 +125,7 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     char linha[256];
     char nomeFilme[50];
     char procuraFilme[50];
-    char *duracao;
+    char duracao[10];
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     limparBuffer();
     scanf(" %[^\n]s", nomeFilme); // de novo o %s
@@ -155,4 +157,5 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     else{
         printf("Filme não disponível no catálogo");
     }
+    
 }
