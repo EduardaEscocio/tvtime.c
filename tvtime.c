@@ -33,11 +33,11 @@ int opcaoMenu = 9;
 //N funfa
 int loginValido(char *login){
     for(int i = 0; i < strlen(login); i++){
-        if(isspace(login[i])==0){
+        if(isspace(login[i])==0){//tem espaços?
             printf("Login inválido! Tente novamente.\n");
             return 1;
             break;
-    
+
         }
         else{
             return 0;
@@ -165,6 +165,7 @@ void lerPortfolio(FILE *portfolio){
 }
 
 // ADICIONAR FILME COMO ASSISTIDO E NAS ESTATISTICAS (USUÁRIO COMUM) FUNCIONANDO COLOCAR PRA ADICONAR NUM ARQUIVO
+// FAZER A SOMA DE MINUTOS
 void filmeAssistido(FILE *portfolio){
     int encontrado = 0;
     char linha[256];
@@ -174,7 +175,6 @@ void filmeAssistido(FILE *portfolio){
     limparBuffer();
     scanf(" %[^\n]s", nomeFilme); // de novo o %s
     rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
-    //Função que percorre com 2 for para encontrar o filme e adicionar na lista de filmes assistidos, comparando letra a letra e atualizando a letra sempre.
     while(fgets(linha, sizeof(linha), portfolio)){
         if(strstr(linha, nomeFilme) != NULL){
             encontrado+=1;
