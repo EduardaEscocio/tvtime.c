@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int menuPrincipal() {
-    int opcaoMenu = 0;  
+    int opcaoMenuPrincipal = 0;  
 
     printf("\n\033[0;36m");
     printf("===================================\n");
@@ -16,11 +16,11 @@ int menuPrincipal() {
     
     printf("Opção: ");
     
-    if (scanf("%d", &opcaoMenu) != 1) {
+    if (scanf("%d", &opcaoMenuPrincipal) != 1) {
         while (getchar() != '\n');  
         return -1;  
     }
-    return opcaoMenu;
+    return opcaoMenuPrincipal;
 }
 
 int menuAdmin() {

@@ -3,55 +3,42 @@
 #include <string.h>
 #include "filmes.h"
 #include "utils.h"
+char ch;
 
-void adicionarFilme(FILE *portfolio) {
-    Filme *novoFilme = (Filme*)malloc(sizeof(Filme));
+void adicionarFilme(FILE *portfolio){
+    Filme * novoFilme = (Filme*)malloc(sizeof(Filme));
     if(novoFilme == NULL){
-        printf("Erro ao alocar memória");
+        printf("Erro ao alocar memória");
         return;
     }
-    
     printf("Nome: ");
     scanf(" %[^\n]s", novoFilme->nome);
-    printf("Duração: ");
-    scanf(" %[^\n]s", novoFilme->duracao);
-    printf("Gênero: ");
+    printf("Duração: ");
+    //Validar para adicionar apenas numeros;
+    scanf(" %[^\n]s", novoFilme->duracao); // dar um jeito de adicionar o : caso o usuário digite apenas numeros, formato ideal = HM:SmS
+    printf("Gênero: ");
     scanf(" %[^\n]s", novoFilme->genero);
-    printf("Ano de lançamento: ");
+    printf("Ano de lançamento: ");
     scanf("%d", &novoFilme->ano);
-    
-    fprintf(portfolio, "%s | %s | %s | %d\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
-    free(novoFilme);
-    printf("Filme adicionado com sucesso!\n");
-    limparBuffer();
-}
-
-void lerPortfolio(FILE *portfolio) {
-    rewind(portfolio);
-    char ch;
-    while((ch = fgetc(portfolio)) != EOF) {
-        putchar(ch);
+    if(portfolio == NULL){
+        printf("Erro ao abrir o arquivo");
+        free(novoFilme);
+        return;
     }
+    fprintf(portfolio, "%s | %s | %s | %d |\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
+    free(novoFilme);
+    printf("O filme foi adicionado com sucesso no catálogo!\n");
+    limparBuffer();
 }
 
-void filmeAssistido(FILE *portfolio) {
-    char nomeFilme[50], linha[256];
-    int encontrado = 0;
-    
-    printf("Nome do filme assistido: ");
-    limparBuffer();
-    scanf(" %[^\n]s", nomeFilme);
-
-    rewind(portfolio);
-    while(fgets(linha, sizeof(linha), portfolio)){
-        if(strstr(linha, nomeFilme) != NULL){
-            encontrado = 1;
+void lerPortfolio(FILE *portfolio){
+    rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
+    while(1){
+        ch = fgetc(portfolio);
+        if(ch == EOF){
             break;
         }
+        printf("%c",ch);
     }
-    
-    if(encontrado)
-        printf("Filme encontrado e marcado como assistido!\n");
-    else
-        printf("Filme não encontrado.\n");
 }
+

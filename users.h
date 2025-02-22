@@ -10,8 +10,18 @@ typedef struct usuario{
     int adminId; // 0 - comun - 1 admin
 } User;
 
+typedef struct estatisticas {
+    char login[50];
+    int horasTotais;
+    int minutosTotais;
+} Estatisticas;
+
 void cadastro(FILE *usuarios);
-void login();
+char* login(FILE *usuarios);
+void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login);
+int loginExiste(FILE *usuarios, char *login);
+int loginValido(char *login);
+int converterParaInt(char *duracao);
 
 #endif
 

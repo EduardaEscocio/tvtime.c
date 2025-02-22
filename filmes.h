@@ -12,6 +12,5 @@ typedef struct filme {
 
 void adicionarFilme(FILE *portfolio);
 void lerPortfolio(FILE *portfolio);
-void filmeAssistido(FILE *portfolio);
 
 #endif

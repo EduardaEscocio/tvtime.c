@@ -5,57 +5,154 @@
 #include "users.h"
 #include "utils.h"
 
+int loginExiste(FILE *usuarios, char *login) {
+    char linha[256];
+    rewind(usuarios); // Volta ao início do arquivo
+    while (fgets(linha, sizeof(linha), usuarios)) {
+        char loginArquivo[50];
+        sscanf(linha, "%[^|]| %[^|] |%[^|]", loginArquivo); // Extrai o login do arquivo
+        if (strcmp(loginArquivo, login) == 0) {
+            return 1; // Login já existe
+        }
+    }
+    return 0; // Login não existe
+}
+int loginValido(char *login) {
+    for (int i = 0; i < strlen(login); i++) {
+        if (isspace(login[i])) { // Se encontrar espaço, login é inválido
+            printf("Login inválido! O login não pode conter espaços.\n");
+            return 1; // Retorna 1 para indicar que o login é inválido
+        }
+    }
+    return 0; // Retorna 0 para indicar que o login é válido
+}
+
 void cadastro(FILE *usuarios) {
+    User novoUsuario;
     char nome[50];
     char login[50];
     char senha[50];
 
-    User *novoUsuario = (User*)malloc(sizeof(User));
-    if(novoUsuario == NULL){
-        printf("Erro ao alocar memória");
-        return;
-    }
-
+    // Validação do login
     do {
         printf("Login: ");
-        scanf(" %[^\n]s", login);
-    } while(strlen(login) < 3); // Validação simples
+        scanf(" %[^\n]", login);
+        if (loginValido(login)) {
+        } else if (loginExiste(usuarios, login)) {
+            printf("Login já existe. Tente outro.\n");
+        }
+    } while (loginValido(login) || loginExiste(usuarios, login));
 
-    strcpy(novoUsuario->login, login);
+    strcpy(novoUsuario.login, login);
+
     printf("Nome: ");
-    scanf(" %[^\n]s", nome);
-    strcpy(novoUsuario->nome, nome);
+    scanf(" %[^\n]", nome);
+    strcpy(novoUsuario.nome, nome);
+
     printf("Senha: ");
-    scanf(" %[^\n]s", senha);
-    strcpy(novoUsuario->senha, senha);
+    scanf(" %[^\n]", senha);
+    strcpy(novoUsuario.senha, senha);
 
-    if(usuarios == NULL){
-        printf("Erro ao abrir o arquivo\n");
-        free(novoUsuario);
-        return;
-    }
-
-    if(fgetc(usuarios) == EOF){
-        novoUsuario->adminId = 1; // Primeiro usuário é admin
+    // Verifica se o arquivo está vazio para definir o admin
+    rewind(usuarios);
+    if (fgetc(usuarios) == EOF) {
+        novoUsuario.adminId = 1; // Primeiro usuário é admin
     } else {
-        novoUsuario->adminId = 0;
+        novoUsuario.adminId = 0; // Usuário comum
     }
 
-    fprintf(usuarios, "%s | %s | %s | %d\n", novoUsuario->nome, novoUsuario->login, novoUsuario->senha, novoUsuario->adminId);
-    fclose(usuarios);
-    free(novoUsuario);
-    printf("Usuário registrado com sucesso!\n");
-    limparBuffer();
+    // Escreve o novo usuário no arquivo
+    fprintf(usuarios, "%s | %s | %s | %d\n", novoUsuario.nome, novoUsuario.login, novoUsuario.senha, novoUsuario.adminId);
+    printf("Usuário registrado com sucesso!\n");
 }
 
-void login() {
+char* login(FILE *usuarios) {
+    char linha[256];
     char login_atual[50];
     char senha_atual[50];
-    
+    int encontrado = 0;
+
     printf("Digite seu login: ");
-    scanf(" %[^\n]s", login_atual);
+    scanf(" %[^\n]", login_atual);
+    limparBuffer(); // Limpa o buffer do teclado
+
     printf("Digite sua senha: ");
-    scanf(" %[^\n]s", senha_atual);
-    
-    // Aqui, você pode implementar a lógica para verificar os usuários no arquivo
+    scanf(" %[^\n]", senha_atual);
+    limparBuffer(); // Limpa o buffer do teclado
+
+    rewind(usuarios); // Volta ao início do arquivo
+
+    while (fgets(linha, sizeof(linha), usuarios)) {
+        char loginArquivo[50];
+        char senhaArquivo[50];
+        int adminId;
+
+        // Extrai o login, senha e adminId do arquivo
+        sscanf(linha, "%*[^|]| %[^|] | %[^|] | %d", loginArquivo, senhaArquivo, &adminId);
+
+        // Compara login e senha
+        if (strcmp(loginArquivo, login_atual) == 0 && strcmp(senhaArquivo, senha_atual) == 0) {
+            encontrado = 1;
+            break;
+        }
+    }
+
+    if (encontrado) {
+        printf("Login realizado com sucesso!\n");
+
+        // Retorna o login do usuário (aloca memória para o retorno)
+        char *loginRetorno = malloc(50 * sizeof(char));
+        if (loginRetorno == NULL) {
+            printf("Erro ao alocar memória.\n");
+            return NULL;
+        }
+        strcpy(loginRetorno, login_atual);
+        return loginRetorno; //Usar para estatisticas
+    } else {
+        printf("Login ou senha incorretos! Tente novamente.\n");
+        return NULL; // Retorna NULL em caso de falha
+    }
+}
+int converterParaInt(char *duracao){
+    int horas, minutos; 
+    sscanf(duracao, "%d:%d", &horas, &minutos);
+    return horas * 60 + minutos;
+}
+void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
+    int encontrado = 0;
+    char linha[256];
+    char nomeFilme[50];
+    char procuraFilme[50];
+    char *duracao;
+    printf("Qual o nome do filme que você quer adicionar como assistido? ");
+    limparBuffer();
+    scanf(" %[^\n]s", nomeFilme); // de novo o %s
+
+    rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
+    while(fgets(linha, sizeof(linha), portfolio)){
+        if(strstr(linha, nomeFilme) != NULL){ //vê se o filme existe no portfolio
+            sscanf(linha, "%[^|]| %[^|] |%[^|]|%*[^|]|", duracao); //pegar a duração do filme
+            encontrado=1;//encontrado!
+            break;
+        }
+    }
+    if(encontrado >= 1){
+        printf("Filme encontrado\n");
+        int minutos = converterParaInt(duracao);//char para int
+        Estatisticas stats;//cria a struct que armazena as estatisticas 
+        rewind(estatisticas);
+        while(fgets(linha, sizeof(linha), estatisticas)) {
+            sscanf(linha, "%[^|]| %d %d", stats.login, &stats.horasTotais, &stats.minutosTotais);
+            if(strcmp(stats.login, login) == 0) {
+                stats.minutosTotais += minutos;
+                stats.horasTotais += stats.minutosTotais / 60;
+                stats.minutosTotais %= 60;
+                break;
+            }
+        }
+        fprintf(estatisticas, "%s | %d %d\n", login, stats.horasTotais, stats.minutosTotais);
+    }
+    else{
+        printf("Filme não disponível no catálogo");
+    }
 }
