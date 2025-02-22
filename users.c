@@ -21,7 +21,6 @@ int loginExiste(FILE *usuarios, char *login) {
 int loginValido(char *login) {
     for (int i = 0; i < strlen(login); i++) {
         if (isspace(login[i])) { // Se encontrar espaço, login é inválido
-            printf("Login inválido! O login não pode conter espaços.\n");
             return 1; // Retorna 1 para indicar que o login é inválido
         }
     }
@@ -40,6 +39,7 @@ void cadastro(FILE *usuarios) {
         printf("Login: ");
         scanf(" %[^\n]", login);
         if (loginValido(login)) {
+            printf("Login inválido! O login não pode conter espaços.\n");
         } else if (loginExiste(usuarios, login)) {
             printf("Login já existe. Tente outro.\n");
         }
@@ -115,7 +115,7 @@ char* login(FILE *usuarios) {
         }
         
         strcpy(loginRetorno, login_atual);
-        return loginRetorno // Usar para estatísticas
+        return loginRetorno; // Usar para estatísticas
     } else {
         printf("Login ou senha incorretos! Tente novamente.\n");
         return NULL; // Retorna NULL em caso de falha
