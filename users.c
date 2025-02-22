@@ -128,6 +128,7 @@ int converterParaInt(char *duracao){
     return horas * 60 + minutos;
 }
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
+    //Adicionar plataformas
     int encontrado = 0;
     char linha[256];
     char nomeFilme[50];
