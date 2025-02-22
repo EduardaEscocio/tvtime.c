@@ -25,7 +25,6 @@ int main() {
             fclose(usuarios);
         } else if (opcaoMenu == 2) {
             FILE *usuarios = fopen("usuarios.txt", "a+");
-
             loginUsuario = login(usuarios); // Captura o login do usuário
             if (loginUsuario != NULL) {
                 printf("Bem-vindo, %s!\n", loginUsuario);

@@ -94,10 +94,11 @@ char* login(FILE *usuarios) {
 
         // Extrai o nome, login, senha e adminId do arquivo
         
-        if (sscanf(linha, "%[^|]| %[^|] | %[^|] | %d", nomeArquivo, loginArquivo, senhaArquivo, &adminId) == 4) {
+        if (sscanf(linha, "%[^|]| %[^|] | %[^|] %d", nomeArquivo, loginArquivo, senhaArquivo, &adminId) == 4) {
             // Compara login e senha
             if (strcmp(loginArquivo, login_atual) == 0 && strcmp(senhaArquivo, senha_atual) == 0) {
                 encontrado = 1;
+                int adminIdUser = adminId;
                 break;
             }
         }
@@ -112,13 +113,13 @@ char* login(FILE *usuarios) {
             printf("Erro ao alocar memória.\n");
             return NULL;
         }
+        
         strcpy(loginRetorno, login_atual);
-        return loginRetorno; // Usar para estatísticas
+        return loginRetorno // Usar para estatísticas
     } else {
         printf("Login ou senha incorretos! Tente novamente.\n");
         return NULL; // Retorna NULL em caso de falha
     }
-    // fclose(usuarios);
 }
 
 int converterParaInt(char *duracao){

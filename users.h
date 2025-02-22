@@ -2,6 +2,10 @@
 #define USERS_H
 
 #include <stdio.h>
+typedef struct info {
+    char login[50];
+    int adminId;
+} LoginInfo;
 
 typedef struct usuario{
     char login[50];
