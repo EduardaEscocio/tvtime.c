@@ -10,10 +10,12 @@ int opcaoMenu = 9;
 int main(){
     FILE *usuarios = fopen("usuarios.txt", "a+");
     FILE *portfolio = fopen("portfolio.txt", "a+"); // Abre o arquivo para leitura e escrita
-    if (portfolio == NULL) {
+    
+	if (portfolio == NULL) {
         printf("Erro ao abrir o arquivo portfolio.txt\n");
         return 1;
     }
+
 //menus
     while(opcaoMenu != 0){
         menuPrincipal();
