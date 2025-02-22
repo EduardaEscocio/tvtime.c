@@ -75,46 +75,47 @@ char* login(FILE *usuarios) {
     int encontrado = 0;
 
     printf("Digite seu login: ");
+    // limparBuffer(); // Limpa o buffer do teclado
     scanf(" %[^\n]", login_atual);
-    limparBuffer(); // Limpa o buffer do teclado
 
     printf("Digite sua senha: ");
+    // limparBuffer(); // Limpa o buffer do teclado
     scanf(" %[^\n]", senha_atual);
-    limparBuffer(); // Limpa o buffer do teclado
-
-    rewind(usuarios); // Volta ao início do arquivo
-
+    rewind(usuarios); // Volta ao início do arquivo
+    
     while (fgets(linha, sizeof(linha), usuarios)) {
+        char nomeArquivo[50];
         char loginArquivo[50];
         char senhaArquivo[50];
         int adminId;
 
-        // Extrai o login, senha e adminId do arquivo
-        sscanf(linha, "%*[^|]| %[^|] | %[^|] | %d", loginArquivo, senhaArquivo, &adminId);
-
-        // Compara login e senha
-        if (strcmp(loginArquivo, login_atual) == 0 && strcmp(senhaArquivo, senha_atual) == 0) {
-            encontrado = 1;
-            break;
+        // Extrai o nome, login, senha e adminId do arquivo
+        if (sscanf(linha, "%[^|]| %[^|] | %[^|] | %d", nomeArquivo, loginArquivo, senhaArquivo, &adminId) == 4) {
+            // Compara login e senha
+            if (strcmp(loginArquivo, login_atual) == 0 && strcmp(senhaArquivo, senha_atual) == 0) {
+                encontrado = 1;
+                break;
+            }
         }
     }
 
     if (encontrado) {
         printf("Login realizado com sucesso!\n");
 
-        // Retorna o login do usuário (aloca memória para o retorno)
+        // Retorna o login do usuário (aloca memória para o retorno)
         char *loginRetorno = malloc(50 * sizeof(char));
         if (loginRetorno == NULL) {
-            printf("Erro ao alocar memória.\n");
+            printf("Erro ao alocar memória.\n");
             return NULL;
         }
         strcpy(loginRetorno, login_atual);
-        return loginRetorno; //Usar para estatisticas
+        return loginRetorno; // Usar para estatísticas
     } else {
         printf("Login ou senha incorretos! Tente novamente.\n");
         return NULL; // Retorna NULL em caso de falha
     }
 }
+
 int converterParaInt(char *duracao){
     int horas, minutos; 
     sscanf(duracao, "%d:%d", &horas, &minutos);
