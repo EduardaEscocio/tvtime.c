@@ -87,7 +87,7 @@ void cadastro(FILE *usuarios){
 }
 
 void login(){
-    //Essa função precisa buscar o usuário para logar e buscar suas estatísticas ou adicionar novos filmes assistidos;
+    //Essa função precisa buscar o usuário para logar e buscar suas estatísticas;
     char login_atual[50];
     char senha_atual[50];
     printf("Digite seu login: \n");
@@ -136,6 +136,7 @@ void adicionarFilme(FILE *portfolio){
     printf("Nome: ");
     scanf(" %[^\n]s", novoFilme->nome);
     printf("Duração: ");
+    //Validar para adicionar apenas numeros;
     scanf(" %[^\n]s", novoFilme->duracao); // dar um jeito de adicionar o : caso o usuário digite apenas numeros, formato ideal = HM:SmS
     printf("Gênero: ");
     scanf(" %[^\n]s", novoFilme->genero);
@@ -193,7 +194,7 @@ int main(){
         printf("Erro ao abrir o arquivo portfolio.txt\n");
         return 1;
     }
-
+//menus
     while(opcaoMenu != 0){
         menuPrincipal();
         if(opcaoMenu == 1){
