@@ -7,11 +7,10 @@
 int opcaoMenu = 9;
 
 int main() {
-    FILE *usuarios = fopen("usuarios.txt", "a+");
     FILE *estatisticas = fopen("estatisticas.txt", "a+");
     FILE *portfolio = fopen("portfolio.txt", "a+");
 
-    if (usuarios == NULL || estatisticas == NULL || portfolio == NULL) {
+    if (estatisticas == NULL || portfolio == NULL) {
         printf("Erro ao abrir os arquivos.\n");
         return 1;
     }
@@ -21,12 +20,18 @@ int main() {
     while (opcaoMenu != 0) {
         opcaoMenu = menuPrincipal();
         if (opcaoMenu == 1) {
+            FILE *usuarios = fopen("usuarios.txt", "a+");
             cadastro(usuarios);
+            fclose(usuarios);
         } else if (opcaoMenu == 2) {
+            FILE *usuarios = fopen("usuarios.txt", "a+");
+
             loginUsuario = login(usuarios); // Captura o login do usuário
             if (loginUsuario != NULL) {
                 printf("Bem-vindo, %s!\n", loginUsuario);
             }
+            fclose(usuarios);
+
         } else if (opcaoMenu == 3) {
             lerPortfolio(portfolio);
         } else if (opcaoMenu == 4) {

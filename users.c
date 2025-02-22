@@ -4,19 +4,20 @@
 #include <ctype.h>
 #include "users.h"
 #include "utils.h"
-
+//NAO FUNCIONA
 int loginExiste(FILE *usuarios, char *login) {
     char linha[256];
     rewind(usuarios); // Volta ao início do arquivo
     while (fgets(linha, sizeof(linha), usuarios)) {
         char loginArquivo[50];
-        sscanf(linha, "%[^|]|", loginArquivo); // Extrai o login do arquivo
+        scanf(linha, "%[^|]", loginArquivo); // Extrai o login do arquivo
         if (strcmp(loginArquivo, login) == 0) {
             return 1; // Login já existe
         }
     }
     return 0; // Login não existe
 }
+//FUNCIONA MAS PRINTA MUITO
 int loginValido(char *login) {
     for (int i = 0; i < strlen(login); i++) {
         if (isspace(login[i])) { // Se encontrar espaço, login é inválido
@@ -28,6 +29,7 @@ int loginValido(char *login) {
 }
 
 void cadastro(FILE *usuarios) {
+    // FILE *usuarios = fopen("usuarios.txt", "a+");
     User *novoUsuario = malloc(sizeof(User));
     char nome[50];
     char login[50];
@@ -62,13 +64,14 @@ void cadastro(FILE *usuarios) {
     }
 
     // Escreve o novo usuário no arquivo
-    fprintf(usuarios, "%s | %s | %s | %d\n", novoUsuario->nome, novoUsuario->login, novoUsuario->senha, novoUsuario->adminId);
+    fprintf(usuarios, "%s|%s|%s|%d\n", novoUsuario->nome, novoUsuario->login, novoUsuario->senha, novoUsuario->adminId);
     printf("Usuário registrado com sucesso!\n");
     free(novoUsuario);
-    fclose(usuarios);
+    // fclose(usuarios);
 }
 
 char* login(FILE *usuarios) {
+
     char linha[256];
     char login_atual[50];
     char senha_atual[50];
@@ -90,6 +93,7 @@ char* login(FILE *usuarios) {
         int adminId;
 
         // Extrai o nome, login, senha e adminId do arquivo
+        
         if (sscanf(linha, "%[^|]| %[^|] | %[^|] | %d", nomeArquivo, loginArquivo, senhaArquivo, &adminId) == 4) {
             // Compara login e senha
             if (strcmp(loginArquivo, login_atual) == 0 && strcmp(senhaArquivo, senha_atual) == 0) {
@@ -98,7 +102,7 @@ char* login(FILE *usuarios) {
             }
         }
     }
-
+    
     if (encontrado) {
         printf("Login realizado com sucesso!\n");
 
@@ -114,6 +118,7 @@ char* login(FILE *usuarios) {
         printf("Login ou senha incorretos! Tente novamente.\n");
         return NULL; // Retorna NULL em caso de falha
     }
+    // fclose(usuarios);
 }
 
 int converterParaInt(char *duracao){
