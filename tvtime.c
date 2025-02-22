@@ -30,21 +30,25 @@ typedef struct filme{
 
 char ch;
 int opcaoMenu = 9;
-
-bool loginValido(char *login){
-        if(isspace(*login)!=0){
+//N funfa
+int loginValido(char *login){
+    for(int i = 0; i < strlen(login); i++){
+        if(isspace(login[i])==0){
             printf("Login inválido! Tente novamente.\n");
-            return false;
+            return 1;
+            break;
+    
         }
         else{
-            return true;
+            return 0;
         }
     }
+}
 
 
 void cadastro(FILE *usuarios){
     char nome[50];
-    char *login = malloc(sizeof(*login));
+    char *login = malloc(50 *sizeof(char));
     char senha[50];
     int ch;
     //validação de dados de login e senha necessario;
@@ -54,10 +58,10 @@ void cadastro(FILE *usuarios){
         return;
     }
     //SE CERTIFICAR DE QUE O USUÁRIO NÃO VAI TENTAR CADASTRAR COM UM LOGIN QUE JA EXISTE (GUSTAVO)
-    printf("login: \n");
     do {
+        printf("login: \n");
         scanf(" %[^\n]s", login);
-    } while(!loginValido);
+    } while(loginValido(login)==1);
     
     strcpy(novoUsuario->login, login);
     printf("Nome: \n");
@@ -90,9 +94,8 @@ void login(){
     scanf("%[^\n]s", login_atual);
     printf("Digite sua senha: \n");
     scanf("%[^\n]s", senha_atual);
-
-
-
+    //validar nome e senha quando encontrados
+    //detectar se é adm ou não
 
 }
 
@@ -161,7 +164,7 @@ void lerPortfolio(FILE *portfolio){
     }
 }
 
-// ADICIONAR FILME COMO ASSISTIDO E NAS ESTATISTICAS (USUÁRIO COMUM)
+// ADICIONAR FILME COMO ASSISTIDO E NAS ESTATISTICAS (USUÁRIO COMUM) FUNCIONANDO COLOCAR PRA ADICONAR NUM ARQUIVO
 void filmeAssistido(FILE *portfolio){
     int encontrado = 0;
     char linha[256];
@@ -207,5 +210,6 @@ int main(){
         }
     }
     fclose(portfolio); // Fecha o arquivo apenas no final do programa
+    fclose(usuarios);
     return 0;
 }
