@@ -3,5 +3,5 @@
 
 int menuPrincipal();
 int menuAdmin();
-
+int menuUsuario();
 #endif

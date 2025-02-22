@@ -25,7 +25,7 @@ int main() {
             fclose(usuarios);
         } else if (opcaoMenu == 2) {
             FILE *usuarios = fopen("usuarios.txt", "a+");
-            loginUsuario = login(usuarios); // Captura o login do usuário
+            loginUsuario = login(usuarios); // precisamos saber se o usuario é ou não um adm para mostrar o menu certo; 
             if (loginUsuario != NULL) {
                 printf("Bem-vindo, %s!\n", loginUsuario);
             }
