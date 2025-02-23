@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include "filmes.h"
+#include "users.h"
 
 int menuPrincipal() {
     int opcaoMenuPrincipal = 0;  
@@ -22,17 +24,16 @@ int menuPrincipal() {
     }
     return opcaoMenuPrincipal;
 }
-int menuUsuario() {
+int menuUsuario(FILE *portfolio) {
     int opcaoMenuUsuario = 9;  
 
     printf("\n\033[0;36m");
     printf("===================================\n");
     printf("           MENU USUÁRIO             \n");
     printf("===================================\n");
-    printf("\t[1] - Adicionar novo filme\n");
-    printf("\t[2] - Adicionar filme como assistido\n");
-    printf("\t[3] - Visualizar estatísticas\n");
-    printf("\t[4] - Listar filmes assistidos\n");
+    printf("\t[1] - Adicionar filme como assistido\n");
+    printf("\t[2] - Visualizar estatísticas\n");
+    printf("\t[3] - Listar filmes assistidos\n");
     printf("\t[0] - Sair\n");
     printf("===================================\n");
     printf("\033[0m");
@@ -46,7 +47,7 @@ int menuUsuario() {
     return opcaoMenuUsuario;
 }
 
-int menuAdmin() {
+int menuAdmin(FILE *portfolio) {
     int opcaoMenuAdmin = 9;  
 
     printf("\n\033[0;36m");
@@ -67,7 +68,22 @@ int menuAdmin() {
         while (getchar() != '\n');
         return -1;
     }
-    return opcaoMenuAdmin;
+    switch(opcaoMenuAdmin){
+        case 1:
+            adicionarFilme(portfolio);
+            break;
+        // case 2: 
+        //     filmeAssistido(portfolio, estatisticas, login);
+        //     break;
+        case 3:
+            //visualizar estatisticas;
+            break;
+        case 4:
+            //listar filmes assistidos;
+        case 0:
+            break;
+    }
+    
 }
 
 

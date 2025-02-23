@@ -12,23 +12,18 @@ void adicionarFilme(FILE *portfolio){
         return;
     }
     printf("Nome: ");
-    scanf(" %[^\n]s", novoFilme->nome);
+    scanf(" %[^\n]", novoFilme->nome);
     printf("Duração: ");
     //Validar para adicionar apenas numeros;
-    scanf(" %[^\n]s", novoFilme->duracao); // dar um jeito de adicionar o : caso o usuário digite apenas numeros, formato ideal = HM:SmS
+    scanf(" %[^\n]", novoFilme->duracao); // dar um jeito de adicionar o : caso o usuário digite apenas numeros, formato ideal = HM:SmS
     printf("Gênero: ");
-    scanf(" %[^\n]s", novoFilme->genero);
+    scanf(" %[^\n]", novoFilme->genero);
     printf("Ano de lançamento: ");
     scanf("%d", &novoFilme->ano);
-    if(portfolio == NULL){
-        printf("Erro ao abrir o arquivo");
-        free(novoFilme);
-        return;
-    }
-    fprintf(portfolio, "%s | %s | %s | %d |\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
-    free(novoFilme);
+    
+    fprintf(portfolio, "%s|%s|%s|%d|\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
     printf("O filme foi adicionado com sucesso no catálogo!\n");
-    limparBuffer();
+    free(novoFilme);
 }
 
 void lerPortfolio(FILE *portfolio){

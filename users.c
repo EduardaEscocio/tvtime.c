@@ -5,26 +5,27 @@
 #include "users.h"
 #include "utils.h"
 //NAO FUNCIONA
-int loginExiste(FILE *usuarios, char *login) {
+int cadastroExiste(FILE *usuarios, char *login) {
     char linha[256];
     rewind(usuarios); // Volta ao início do arquivo
     while (fgets(linha, sizeof(linha), usuarios)) {
         char loginArquivo[50];
-        scanf(linha, "%[^|]", loginArquivo); // Extrai o login do arquivo
+        sscanf(linha, "%[^|]", loginArquivo); // Extrai o login do arquivo
         if (strcmp(loginArquivo, login) == 0) {
-            return 1; // Login já existe
+            return 0; // Login já existe
         }
     }
-    return 0; // Login não existe
+    return 1; // Login não existe
 }
+
 //FUNCIONA MAS PRINTA MUITO
 int loginValido(char *login) {
     for (int i = 0; i < strlen(login); i++) {
         if (isspace(login[i])) { // Se encontrar espaço, login é inválido
-            return 1; // Retorna 1 para indicar que o login é inválido
+            return 0; // Retorna 0 para indicar que o login é inválido
         }
     }
-    return 0; // Retorna 0 para indicar que o login é válido
+    return 1; // Retorna 1 para indicar que o login é válido
 }
 
 void cadastro(FILE *usuarios) {
@@ -36,14 +37,9 @@ void cadastro(FILE *usuarios) {
 
     // Validação do login
     do {
-        printf("Login: ");
+        printf("Nome de usuário: ");
         scanf(" %[^\n]", login);
-        if (loginValido(login)) {
-            printf("Login inválido! O login não pode conter espaços.\n");
-        } else if (loginExiste(usuarios, login)) {
-            printf("Login já existe. Tente outro.\n");
-        }
-    } while (loginValido(login) || loginExiste(usuarios, login));
+    } while (loginValido(login)==0 || cadastroExiste(usuarios, login)==0);
 
     strcpy(novoUsuario->login, login);
 
@@ -55,8 +51,8 @@ void cadastro(FILE *usuarios) {
     scanf(" %[^\n]", senha);
     strcpy(novoUsuario->senha, senha);
 
-    // Verifica se o arquivo está vazio para definir o admin
     rewind(usuarios);
+    // Verifica se o arquivo está vazio para definir o admin
     if (fgetc(usuarios) == EOF) {
         novoUsuario->adminId = 1; // Primeiro usuário é admin
     } else {
@@ -64,61 +60,77 @@ void cadastro(FILE *usuarios) {
     }
 
     // Escreve o novo usuário no arquivo
-    fprintf(usuarios, "%s|%s|%s|%d\n", novoUsuario->nome, novoUsuario->login, novoUsuario->senha, novoUsuario->adminId);
+    if(fprintf(usuarios, "%s|%s|%s|%d\n", novoUsuario->login, novoUsuario->nome, novoUsuario->senha, novoUsuario->adminId) < 0){
+        printf("Falha ao escrever no banco de dados");
+    }
+    
+    printf("%s|%s|%s|%d\n", novoUsuario->login, novoUsuario->nome, novoUsuario->senha, novoUsuario->adminId);
     printf("Usuário registrado com sucesso!\n");
-    free(novoUsuario);
     // fclose(usuarios);
 }
-
-char* login(FILE *usuarios) {
-
+char *login(FILE *usuarios) {
     char linha[256];
     char login_atual[50];
     char senha_atual[50];
     int encontrado = 0;
 
     printf("Digite seu login: ");
-    // limparBuffer(); // Limpa o buffer do teclado
     scanf(" %[^\n]", login_atual);
 
     printf("Digite sua senha: ");
-    // limparBuffer(); // Limpa o buffer do teclado
     scanf(" %[^\n]", senha_atual);
+
     rewind(usuarios); // Volta ao início do arquivo
-    
+
     while (fgets(linha, sizeof(linha), usuarios)) {
         char nomeArquivo[50];
         char loginArquivo[50];
         char senhaArquivo[50];
         int adminId;
-
-        // Extrai o nome, login, senha e adminId do arquivo
         
-        if (sscanf(linha, "%[^|]| %[^|] | %[^|] %d", nomeArquivo, loginArquivo, senhaArquivo, &adminId) == 4) {
+        // Extrai o nome, login, senha e adminId do arquivo
+        if (sscanf(linha, " %[^|]|%[^|]|%[^|]|%d", loginArquivo, nomeArquivo, senhaArquivo, &adminId) == 4) {
             // Compara login e senha
             if (strcmp(loginArquivo, login_atual) == 0 && strcmp(senhaArquivo, senha_atual) == 0) {
                 encontrado = 1;
-                int adminIdUser = adminId;
                 break;
             }
         }
     }
-    
+
     if (encontrado) {
         printf("Login realizado com sucesso!\n");
 
-        // Retorna o login do usuário (aloca memória para o retorno)
+        // Aloca memória dinamicamente para o login de retorno
         char *loginRetorno = malloc(50 * sizeof(char));
         if (loginRetorno == NULL) {
             printf("Erro ao alocar memória.\n");
             return NULL;
         }
-        
+
         strcpy(loginRetorno, login_atual);
-        return loginRetorno; // Usar para estatísticas
+        return loginRetorno; // Retorna o ponteiro alocado dinamicamente
     } else {
         printf("Login ou senha incorretos! Tente novamente.\n");
         return NULL; // Retorna NULL em caso de falha
+    }
+}
+int detectarAdm(char *login, FILE *usuarios){
+    char linha[256];
+    rewind(usuarios);
+
+    while (fgets(linha, sizeof(linha), usuarios)) {
+        char nomeArquivo[50];
+        char loginArquivo[50];
+        char senhaArquivo[50];
+        int adminId;
+        // Extrai o nome, login, senha e adminId do arquivo
+        if (sscanf(linha, " %[^|]|%[^|]|%[^|]|%d", loginArquivo, nomeArquivo, senhaArquivo, &adminId) == 4) {
+            // Compara login e senha
+            if (strcmp(loginArquivo, login) == 0){
+                return adminId;
+            }
+        }
     }
 }
 
