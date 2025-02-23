@@ -16,11 +16,11 @@ int main(){
     
     while (opcaoMenu != 0) {
         opcaoMenu = menuPrincipal();
+
         if (opcaoMenu == 1) {
-            // FILE *usuarios = fopen("usuarios.txt", "a+");
             cadastro(usuarios);
-            // fclose(usuarios);
-        } 
+			
+		} 
         else if(opcaoMenu == 2) {
             
 			char *usuario = login(usuarios);

@@ -1,45 +1,82 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "users.h"
-#include "utils.h"
-//NAO FUNCIONA
+
 int cadastroExiste(FILE *usuarios, char *login) {
-    char linha[256];
-    rewind(usuarios); // Volta ao início do arquivo
-    while (fgets(linha, sizeof(linha), usuarios)) {
-        char loginArquivo[50];
-        sscanf(linha, "%[^|]", loginArquivo); // Extrai o login do arquivo
-        if (strcmp(loginArquivo, login) == 0) {
-            return 0; // Login já existe
-        }
-    }
-    return 1; // Login não existe
+    
+	if(!usuarios){
+		printf("Erro: Arquivo de usuários não está aberto. \n");
+		return -1;
+	}
+
+	if(!login){
+		printf("Usuário Login não encontrado!");
+		return -2;
+	}
+
+	char linha[256];
+    rewind(usuarios);
+    
+	while (fgets(linha, sizeof(linha), usuarios) != NULL) {
+		char *loginUsuario = strtok(linha, "|");
+
+		if(loginUsuario && strcmp(loginUsuario, login) == 0){
+			return 1;
+		}
+	}
+	return 0;
 }
 
-//FUNCIONA MAS PRINTA MUITO
 int loginValido(char *login) {
-    for (int i = 0; i < strlen(login); i++) {
-        if (isspace(login[i])) { // Se encontrar espaço, login é inválido
-            return 0; // Retorna 0 para indicar que o login é inválido
+
+	if(!login){
+		printf("Login inválido!");
+		return 0;
+	}
+	
+	size_t tamanho = strlen(login);
+
+    // Verifica cada caractere do login
+    for (size_t i = 0; i < tamanho; i++) {
+        if (isspace((unsigned char)login[i])) {
+            return 0; // Retorna 0 para indicar que o login é inválido
         }
     }
     return 1; // Retorna 1 para indicar que o login é válido
 }
 
 void cadastro(FILE *usuarios) {
-    // FILE *usuarios = fopen("usuarios.txt", "a+");
-    User *novoUsuario = malloc(sizeof(User));
-    char nome[50];
-    char login[50];
-    char senha[50];
 
-    // Validação do login
+	if(!usuarios){
+        printf("Erro: Arquivo de usuários não está aberto.\n");
+        return;
+	}
+
+    User *novoUsuario = malloc(sizeof(User));
+    if (!novoUsuario) {
+        printf("Error, Alocation Memory fault.\n");
+        return;
+    } 
+
+	char nome[NAME_LENGHT];
+    char login[LOGIN_LENGHT];
+    char senha[PASSWORD_LENGHT];
+
+    // Validação do login
     do {
         printf("Nome de usuário: ");
         scanf(" %[^\n]", login);
-    } while (loginValido(login)==0 || cadastroExiste(usuarios, login)==0);
+		
+		if(!loginValido(login)){
+			printf("Erro: O login não pode conter espaços. \n");
+		} else if (cadastroExiste(usuarios, login)){
+			printf("Erro: O Usuario com esse login, já existe. \n");
+		}
+
+    } while (!loginValido(login) || cadastroExiste(usuarios, login));
 
     strcpy(novoUsuario->login, login);
 
@@ -51,13 +88,9 @@ void cadastro(FILE *usuarios) {
     scanf(" %[^\n]", senha);
     strcpy(novoUsuario->senha, senha);
 
-    rewind(usuarios);
     // Verifica se o arquivo está vazio para definir o admin
-    if (fgetc(usuarios) == EOF) {
-        novoUsuario->adminId = 1; // Primeiro usuário é admin
-    } else {
-        novoUsuario->adminId = 0; // Usuário comum
-    }
+    rewind(usuarios);
+	novoUsuario->adminId = (fgetc(usuarios) == EOF) ? 1 : 0;
 
     // Escreve o novo usuário no arquivo
     if(fprintf(usuarios, "%s|%s|%s|%d\n", novoUsuario->login, novoUsuario->nome, novoUsuario->senha, novoUsuario->adminId) < 0){

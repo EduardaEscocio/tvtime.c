@@ -5,6 +5,10 @@
 
 #include "filmes.h"
 
+bool validarAno(int ano) {
+    return ano > 0 && ano < 2026;
+}
+
 void adicionarFilme(FILE *portfolio){
 
 	if(!portfolio){
@@ -33,7 +37,7 @@ void adicionarFilme(FILE *portfolio){
 	
     do {
         printf("Ano de lançamento: ");
-		if (scanf("%d", &novoFilme->ano) != 1){
+		if (scanf("%d", &novoFilme->ano) != 1 || !validarAno(novoFilme->ano)){
 			printf("Entrada inválida! Digite um número válido \n");
 			while (getchar() != '\n');
 		} 
@@ -54,15 +58,15 @@ void lerPortfolio(FILE *portfolio){
 		return;
 	}
 
-	char read_file[256];
+	char linha[256];
     rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
 
 	printf("\n--- Catálogo de Filmes ---\n");
 
-    while (fgets(read_file, sizeof(read_file), portfolio) != NULL) {
+    while (fgets(linha, sizeof(linha), portfolio) != NULL) {
 
         // Divide a linha em campos usando o delimitador "|"
-        char *nome = strtok(read_file, "|");
+        char *nome = strtok(linha, "|");
         char *duracao = strtok(NULL, "|");
         char *genero = strtok(NULL, "|");
         char *ano_str = strtok(NULL, "|");
