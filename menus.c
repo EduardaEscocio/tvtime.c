@@ -47,7 +47,7 @@ int menuUsuario(FILE *portfolio) {
     return opcaoMenuUsuario;
 }
 
-int menuAdmin(FILE *portfolio) {
+int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
     int opcaoMenuAdmin = 9;  
 
     printf("\n\033[0;36m");
@@ -72,9 +72,9 @@ int menuAdmin(FILE *portfolio) {
         case 1:
             adicionarFilme(portfolio);
             break;
-        // case 2: 
-        //     filmeAssistido(portfolio, estatisticas, login);
-        //     break;
+        case 2: 
+            filmeAssistido(portfolio, estatisticas, login);
+            break;
         case 3:
             //visualizar estatisticas;
             break;

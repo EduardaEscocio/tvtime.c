@@ -1,1 +1,6 @@
-a | ak | 342 |
+LucasBritoViado|Lucas Brito|lucasviado|1
+ESTATISTICAS
+Eduardadada|Eduarda Escocio |eduarda|0
+aaaaa|aaa|aaaa|0
+bbbb|bbb|bb|0
+PedeAcelora|Eduarda|morango|0

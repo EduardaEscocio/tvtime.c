@@ -139,31 +139,35 @@ int converterParaInt(char *duracao){
     sscanf(duracao, "%d:%d", &horas, &minutos);
     return horas * 60 + minutos;
 }
+
+//ARRUMAR ESSA BOMBA AQUI
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     //Adicionar plataformas
     int encontrado = 0;
     char linha[256];
     char nomeFilme[50];
     char procuraFilme[50];
+    char genero[50];
+    int ano;
     char duracao[10];
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
-    limparBuffer();
-    scanf(" %[^\n]s", nomeFilme); // de novo o %s
+    scanf(" %[^\n]", nomeFilme); // de novo o %s
 
     rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
     while(fgets(linha, sizeof(linha), portfolio)){
         if(strstr(linha, nomeFilme) != NULL){ //vê se o filme existe no portfolio
-            sscanf(linha, "%[^|]| %[^|] |%[^|]|%*[^|]|", duracao); //pegar a duração do filme
             encontrado=1;//encontrado!
+            sscanf(linha, "%[^|]|%[^|]|%[^|]|%d", procuraFilme, duracao, genero, &ano); //pegar a duração do filme
             break;
         }
     }
     if(encontrado >= 1){
         printf("Filme encontrado\n");
+        //segmentation fault
         int minutos = converterParaInt(duracao);//char para int
         Estatisticas stats;//cria a struct que armazena as estatisticas 
         rewind(estatisticas);
-        while(fgets(linha, sizeof(linha), estatisticas)) {
+        while(fgets(linha, sizeof(linha), portfolio)) {
             sscanf(linha, "%[^|]| %d %d", stats.login, &stats.horasTotais, &stats.minutosTotais);
             if(strcmp(stats.login, login) == 0) {
                 stats.minutosTotais += minutos;
