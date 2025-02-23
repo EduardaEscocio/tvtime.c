@@ -45,9 +45,16 @@ void adicionarFilme(FILE *portfolio){
 			break;
 	} while (true);
 
-    fprintf(portfolio, "%s|%s|%s|%d|\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano);
-    printf("O filme foi adicionado com sucesso no catálogo!\n");
-    
+    // Posiciona o cursor no final do arquivo
+    fseek(portfolio, 0, SEEK_END);
+
+    if (fprintf(portfolio, "%s|%s|%s|%d|\n", novoFilme->nome, novoFilme->duracao, novoFilme->genero, novoFilme->ano) < 0) {
+        printf("Erro: Falha ao escrever no arquivo.\n");
+    } else {
+        printf("O filme foi adicionado com sucesso no catálogo!\n");
+    }
+
+	fflush(portfolio);
 	free(novoFilme);
 }
 
