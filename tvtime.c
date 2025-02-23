@@ -22,38 +22,41 @@ int main(){
             // fclose(usuarios);
         } 
         else if(opcaoMenu == 2) {
-            char *usuario = login(usuarios);
+            
+			char *usuario = login(usuarios);
             int id = detectarAdm(usuario ,usuarios);
+
             if(usuario!= NULL){ //fazer aq
-                printf("Bem-vindo, %s!\n", usuario);
+				printf("Bem-vindo, %s!\n", usuario);
                 free(usuario);
+
                 if(id == 0){
                     do{
                         opcaoMenuUsuario = menuUsuario(portfolio);
-                    }while(opcaoMenuUsuario!=0);
+                    } while(opcaoMenuUsuario!=0);
                 }
                 else{
                     do{
                         opcaoMenuAdmin = menuAdmin(portfolio);
-                        }while(opcaoMenuAdmin!=0);
-                }
-            }
-            
-            else if (opcaoMenu == 3) {
-                lerPortfolio(portfolio);
-                
-            } else if (opcaoMenu == 4) {
-                adicionarFilme(portfolio);
-                
-                // } else if (opcaoMenu == 5 && loginUsuario != NULL) {
-                    //     filmeAssistido(portfolio, estatisticas, loginUsuario); // Passa o login do usuário
-                    // }
-                    
+                    } while(opcaoMenuAdmin!=0);
                 }
             }
         }
-fclose(estatisticas);
-fclose(portfolio);
-fclose(usuarios);
-return 0;
+
+        else if (opcaoMenu == 3) {
+            lerPortfolio(portfolio);
+        }
+
+		else if (opcaoMenu == 4) {
+            adicionarFilme(portfolio);
+		}   
+                // } else if (opcaoMenu == 5 && loginUsuario != NULL) {
+                    //     filmeAssistido(portfolio, estatisticas, loginUsuario); // Passa o login do usuário
+                    // }
+                
+	}
+	fclose(estatisticas);
+	fclose(portfolio);
+	fclose(usuarios);
+	return 0;
 }

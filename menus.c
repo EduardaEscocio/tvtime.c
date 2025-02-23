@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "filmes.h"
 #include "users.h"
 
@@ -20,9 +22,10 @@ int menuPrincipal() {
     
     if (scanf("%d", &opcaoMenuPrincipal) != 1) {
         while (getchar() != '\n');  
+	    system("clear");
         return -1;  
     }
-    return opcaoMenuPrincipal;
+	return opcaoMenuPrincipal;
 }
 int menuUsuario(FILE *portfolio) {
     int opcaoMenuUsuario = 9;  
@@ -42,6 +45,7 @@ int menuUsuario(FILE *portfolio) {
     
     if (scanf("%d", &opcaoMenuUsuario) != 1) {
         while (getchar() != '\n');
+	    system("clear");
         return -1;
     }
     return opcaoMenuUsuario;
@@ -66,6 +70,7 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
     
     if (scanf("%d", &opcaoMenuAdmin) != 1) {
         while (getchar() != '\n');
+		system("clear");
         return -1;
     }
     switch(opcaoMenuAdmin){
@@ -83,7 +88,7 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
         case 0:
             break;
     }
-    
+	return 1;
 }
 
 

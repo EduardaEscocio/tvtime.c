@@ -2,11 +2,15 @@
 #define FILMES_H
 
 #include <stdio.h>
+#define NAME_LENGTH 50
+#define DURACAO_LENGTH 50
+#define GENERO_LENGTH 50
+
 
 typedef struct filme {
-    char nome[50];
-    char duracao[50];
-    char genero[50];
+    char nome[NAME_LENGTH];
+    char duracao[DURACAO_LENGTH];
+    char genero[GENERO_LENGTH];
     int ano;
 } Filme;
 
