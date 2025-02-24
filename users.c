@@ -197,17 +197,11 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     char procuraFilme[NAME_LENGHT];
     char duracao[10];
     char genero[50];
-    char plataforma[NAME_LENGHT];
     int ano;
     int encontrado = 0;
-    enum Plataforma{
-        NETFLIX,
-        DISNEY,
-        GLOBOPLAY,
-        HBO,
-        AMAZONPRIME,
-        MERCADOPLAY
-    };
+    
+    char plataforma[NAME_LENGHT];
+    int plataformaEscolha;
     // Solicita o nome do filme
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     scanf(" %[^\n]", nomeFilme);
@@ -219,7 +213,31 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     printf("[5] Amazon Prime\n");
     printf("[6] Mercado Play\n");
     
-    scanf("%s", plataforma);
+    scanf("%d", &plataformaEscolha);
+    switch (plataformaEscolha)
+    {
+    case 1:
+        strcpy(plataforma, "Netflix");
+        break;
+    case 2:
+        strcpy(plataforma, "Disney+");
+    break;
+    case 3:
+        strcpy(plataforma, "Globoplay");
+        break;
+    case 4:
+        strcpy(plataforma, "HBO");
+        break;
+    case 5:
+        strcpy(plataforma, "Amazon");
+    break;
+    case 6:
+        strcpy(plataforma, "Mercado Play");
+        break;
+
+    default:
+        break;
+    }
     nomeFilme[strcspn(nomeFilme, "\n")] = '\0';  // Remove a nova linha deixada pelo fgets
 
     // Procura o filme no portfólio
@@ -266,7 +284,7 @@ void listarFilmesAssistidos(FILE* estatisticas, char *login){
 
  
          // Verifica se todos os campos foram lidos corretamente
-         if (filme && duracao && genero && ano_str) {
+         if (filme && duracao && genero && ano_str && plataforma) {
              int ano = atoi(ano_str); // Converte o ano para inteiro
              printf("\nNome do filme: %s\n", filme);
              printf("Duração: %s\n", duracao);
