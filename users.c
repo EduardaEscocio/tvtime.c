@@ -144,7 +144,7 @@ char *login(FILE *usuarios) {
 
         // Aloca memória dinamicamente para o login de retorno
         char *loginRetorno = malloc(50 * sizeof(char));
-        if (loginRetorno == NULL) {
+		if (loginRetorno == NULL) {
             printf("Erro ao alocar memória.\n");
             return NULL;
         }
@@ -188,15 +188,14 @@ int converterParaInt(char *duracao){
 
 
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
-    
-	if (!portfolio || !estatisticas || !login) {
+    if (!portfolio || !estatisticas || !login) {
         printf("Erro: Arquivos ou login inválidos.\n");
         return;
     }
 
-    char linha[256];
-    char nomeFilme[50];
-    char procuraFilme[50];
+    char linha[LINE_LENGHT];
+    char nomeFilme[NAME_LENGHT];
+    char procuraFilme[NAME_LENGHT];
     char duracao[10];
     char genero[50];
     int ano;
@@ -206,17 +205,31 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     scanf(" %[^\n]", nomeFilme);
 
+    nomeFilme[strcspn(nomeFilme, "\n")] = '\0';  // Remove a nova linha deixada pelo fgets
+
     // Procura o filme no portfólio
     rewind(portfolio);
     while (fgets(linha, sizeof(linha), portfolio)) {
-        if (strstr(linha, nomeFilme) != NULL) { // Verifica se o filme existe
-            encontrado = 1;
-            sscanf(linha, "%[^|]|%[^|]|%[^|]|%d", procuraFilme, duracao, genero, &ano); // Extrai os dados do filme
-            break;
+        // Remove o caractere de nova linha no final da linha (se houver)
+        linha[strcspn(linha, "\n")] = '\0';
+
+        // Extrai os campos da linha
+        if (sscanf(linha, "%[^|]|%[^|]|%[^|]|%d|", procuraFilme, duracao, genero, &ano) == 4) {
+            if (strcmp(procuraFilme, nomeFilme) == 0) {  // Comparação exata do nome do filme
+                encontrado = 1;
+                break;
+            }
         }
     }
 
     if (encontrado) {
-        printf("Filme encontrado!\n");
-	}
+        // Escreve no arquivo de estatísticas
+        if (fprintf(estatisticas, "%s|%s|%s|%s|%d|\n", login, procuraFilme, duracao, genero, ano) < 0) {
+            printf("Erro: Falha ao escrever no arquivo de estatísticas.\n");
+        } else {
+            printf("Filme '%s' adicionado como assistido.\n", procuraFilme);
+        }
+    } else {
+        printf("Erro: Filme '%s' não existe no catálogo atual.\n", nomeFilme);
+    }
 }

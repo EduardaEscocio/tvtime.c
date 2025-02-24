@@ -27,7 +27,7 @@ int menuPrincipal() {
     }
 	return opcaoMenuPrincipal;
 }
-int menuUsuario(FILE *portfolio) {
+int menuUsuario(FILE *portfolio, FILE * estatisticas) {
     int opcaoMenuUsuario = 9;  
 
     printf("\n\033[0;36m");

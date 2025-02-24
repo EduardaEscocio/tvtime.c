@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "menus.h"
 #include "users.h"
 #include "filmes.h"
@@ -28,7 +29,6 @@ int main(){
 
             if(usuario!= NULL){ //fazer aq
 				printf("Bem-vindo, %s!\n", usuario);
-                free(usuario);
 
                 if(id == 0){
                     do{
@@ -37,7 +37,7 @@ int main(){
                 }
                 else{
                     do{
-                        opcaoMenuAdmin = menuAdmin(portfolio);
+                        opcaoMenuAdmin = menuAdmin(portfolio, estatisticas, usuario);
                     } while(opcaoMenuAdmin!=0);
                 }
             }
