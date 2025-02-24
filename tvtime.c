@@ -47,13 +47,6 @@ int main(){
             lerPortfolio(portfolio);
         }
 
-		else if (opcaoMenu == 4) {
-            adicionarFilme(portfolio);
-		}   
-                // } else if (opcaoMenu == 5 && loginUsuario != NULL) {
-                    //     filmeAssistido(portfolio, estatisticas, loginUsuario); // Passa o login do usuário
-                    // }
-                
 	}
 	fclose(estatisticas);
 	fclose(portfolio);

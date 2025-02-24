@@ -17,7 +17,7 @@ int cadastroExiste(FILE *usuarios, char *login) {
 		return -2;
 	}
 
-	char linha[256];
+	char linha[LINE_LENGHT];
     rewind(usuarios);
     
 	while (fgets(linha, sizeof(linha), usuarios) != NULL) {
@@ -101,10 +101,18 @@ void cadastro(FILE *usuarios) {
     printf("Usuário registrado com sucesso!\n");
     // fclose(usuarios);
 }
+
+
 char *login(FILE *usuarios) {
-    char linha[256];
-    char login_atual[50];
-    char senha_atual[50];
+	
+	if(!usuarios){
+		printf("Error: Arquivo de usuários não está aberto.");
+		return NULL;
+	}
+
+    char linha[LINE_LENGHT];
+    char login_atual[LOGIN_LENGHT];
+    char senha_atual[PASSWORD_LENGHT];
     int encontrado = 0;
 
     printf("Digite seu login: ");
@@ -116,9 +124,9 @@ char *login(FILE *usuarios) {
     rewind(usuarios); // Volta ao início do arquivo
 
     while (fgets(linha, sizeof(linha), usuarios)) {
-        char nomeArquivo[50];
-        char loginArquivo[50];
-        char senhaArquivo[50];
+        char nomeArquivo[LOGIN_LENGHT];
+        char loginArquivo[LOGIN_LENGHT];
+        char senhaArquivo[PASSWORD_LENGHT];
         int adminId;
         
         // Extrai o nome, login, senha e adminId do arquivo
@@ -148,14 +156,16 @@ char *login(FILE *usuarios) {
         return NULL; // Retorna NULL em caso de falha
     }
 }
+
+
 int detectarAdm(char *login, FILE *usuarios){
-    char linha[256];
+    char linha[LINE_LENGHT];
     rewind(usuarios);
 
     while (fgets(linha, sizeof(linha), usuarios)) {
-        char nomeArquivo[50];
-        char loginArquivo[50];
-        char senhaArquivo[50];
+        char nomeArquivo[LOGIN_LENGHT];
+        char loginArquivo[LOGIN_LENGHT];
+        char senhaArquivo[PASSWORD_LENGHT];
         int adminId;
         // Extrai o nome, login, senha e adminId do arquivo
         if (sscanf(linha, " %[^|]|%[^|]|%[^|]|%d", loginArquivo, nomeArquivo, senhaArquivo, &adminId) == 4) {
@@ -167,52 +177,46 @@ int detectarAdm(char *login, FILE *usuarios){
     }
 }
 
+
 int converterParaInt(char *duracao){
-    int horas, minutos; 
-    sscanf(duracao, "%d:%d", &horas, &minutos);
-    return horas * 60 + minutos;
+    int horas, minutos, segundos; 
+    if (sscanf(duracao, "%d:%d:%d", &horas, &minutos, &segundos) == 3){
+		return horas * 60 + minutos;
+	}
+	return 0;
 }
 
-//ARRUMAR ESSA BOMBA AQUI
+
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
-    //Adicionar plataformas
-    int encontrado = 0;
+    
+	if (!portfolio || !estatisticas || !login) {
+        printf("Erro: Arquivos ou login inválidos.\n");
+        return;
+    }
+
     char linha[256];
     char nomeFilme[50];
     char procuraFilme[50];
+    char duracao[10];
     char genero[50];
     int ano;
-    char duracao[10];
-    printf("Qual o nome do filme que você quer adicionar como assistido? ");
-    scanf(" %[^\n]", nomeFilme); // de novo o %s
+    int encontrado = 0;
 
-    rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
-    while(fgets(linha, sizeof(linha), portfolio)){
-        if(strstr(linha, nomeFilme) != NULL){ //vê se o filme existe no portfolio
-            encontrado=1;//encontrado!
-            sscanf(linha, "%[^|]|%[^|]|%[^|]|%d", procuraFilme, duracao, genero, &ano); //pegar a duração do filme
+    // Solicita o nome do filme
+    printf("Qual o nome do filme que você quer adicionar como assistido? ");
+    scanf(" %[^\n]", nomeFilme);
+
+    // Procura o filme no portfólio
+    rewind(portfolio);
+    while (fgets(linha, sizeof(linha), portfolio)) {
+        if (strstr(linha, nomeFilme) != NULL) { // Verifica se o filme existe
+            encontrado = 1;
+            sscanf(linha, "%[^|]|%[^|]|%[^|]|%d", procuraFilme, duracao, genero, &ano); // Extrai os dados do filme
             break;
         }
     }
-    if(encontrado >= 1){
-        printf("Filme encontrado\n");
-        //segmentation fault
-        int minutos = converterParaInt(duracao);//char para int
-        Estatisticas stats;//cria a struct que armazena as estatisticas 
-        rewind(estatisticas);
-        while(fgets(linha, sizeof(linha), portfolio)) {
-            sscanf(linha, "%[^|]| %d %d", stats.login, &stats.horasTotais, &stats.minutosTotais);
-            if(strcmp(stats.login, login) == 0) {
-                stats.minutosTotais += minutos;
-                stats.horasTotais += stats.minutosTotais / 60;
-                stats.minutosTotais %= 60;
-                break;
-            }
-        }
-        fprintf(estatisticas, "%s | %d %d\n", login, stats.horasTotais, stats.minutosTotais);
-    }
-    else{
-        printf("Filme não disponível no catálogo");
-    }
-    
+
+    if (encontrado) {
+        printf("Filme encontrado!\n");
+	}
 }

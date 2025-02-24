@@ -6,7 +6,7 @@
 #define LOGIN_LENGHT 50
 #define PASSWORD_LENGHT 50
 #define NAME_LENGHT 50
-
+#define LINE_LENGHT 256
 
 typedef struct usuario{
     char login[LOGIN_LENGHT];
