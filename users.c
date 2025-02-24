@@ -97,7 +97,6 @@ void cadastro(FILE *usuarios) {
         printf("Falha ao escrever no banco de dados");
     }
     
-    printf("%s|%s|%s|%d\n", novoUsuario->login, novoUsuario->nome, novoUsuario->senha, novoUsuario->adminId);
     printf("Usuário registrado com sucesso!\n");
     // fclose(usuarios);
 }
@@ -201,9 +200,14 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     char plataforma[NAME_LENGHT];
     int ano;
     int encontrado = 0;
-    
-
-    
+    enum Plataforma{
+        NETFLIX,
+        DISNEY,
+        GLOBOPLAY,
+        HBO,
+        AMAZONPRIME,
+        MERCADOPLAY
+    };
     // Solicita o nome do filme
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     scanf(" %[^\n]", nomeFilme);
