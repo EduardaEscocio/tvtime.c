@@ -28,6 +28,8 @@ int loginValido(char *login); //
 int converterParaInt(char *duracao); //
 int detectarAdm(char *login, FILE *usuarios); //
 int cadastroExiste(FILE *usuarios, char *login); //
+void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login);
+void listarFilmesAssistidos(FILE *estatisticas, char *login);
 
 #endif
 

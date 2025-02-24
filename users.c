@@ -198,13 +198,24 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     char procuraFilme[NAME_LENGHT];
     char duracao[10];
     char genero[50];
+    char plataforma[NAME_LENGHT];
     int ano;
     int encontrado = 0;
+    
 
+    
     // Solicita o nome do filme
     printf("Qual o nome do filme que você quer adicionar como assistido? ");
     scanf(" %[^\n]", nomeFilme);
-
+    printf("Qual plataforma você utilizou? \n");
+    printf("[1] Netflix\n");
+    printf("[2] Disney+\n");
+    printf("[3] Globoplay\n");
+    printf("[4] HBO\n");
+    printf("[5] Amazon Prime\n");
+    printf("[6] Mercado Play\n");
+    
+    scanf("%s", plataforma);
     nomeFilme[strcspn(nomeFilme, "\n")] = '\0';  // Remove a nova linha deixada pelo fgets
 
     // Procura o filme no portfólio
@@ -220,11 +231,12 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
                 break;
             }
         }
+
     }
 
     if (encontrado) {
         // Escreve no arquivo de estatísticas
-        if (fprintf(estatisticas, "%s|%s|%s|%s|%d|\n", login, procuraFilme, duracao, genero, ano) < 0) {
+        if (fprintf(estatisticas, "%s|%s|%s|%s|%d|%s|\n", login, procuraFilme, duracao, genero, ano, plataforma) < 0) {
             printf("Erro: Falha ao escrever no arquivo de estatísticas.\n");
         } else {
             printf("Filme '%s' adicionado como assistido.\n", procuraFilme);
@@ -233,3 +245,35 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("Erro: Filme '%s' não existe no catálogo atual.\n", nomeFilme);
     }
 }
+
+void listarFilmesAssistidos(FILE* estatisticas, char *login){
+    int encontrado;
+    char linha[LINE_LENGHT];
+    while(fgets(linha, sizeof(linha), estatisticas)){
+        if(strstr(linha, login)){
+
+         // Divide a linha em campos usando o delimitador "|"
+        char *usuario = strtok(linha, "|");
+        char *filme = strtok(NULL, "|");
+        char *duracao = strtok(NULL, "|");
+        char *genero = strtok(NULL, "|");
+        char *ano_str = strtok(NULL, "|");
+        char *plataforma = strtok(NULL, "|");
+
+ 
+         // Verifica se todos os campos foram lidos corretamente
+         if (filme && duracao && genero && ano_str) {
+             int ano = atoi(ano_str); // Converte o ano para inteiro
+             printf("\nNome do filme: %s\n", filme);
+             printf("Duração: %s\n", duracao);
+             printf("Gênero: %s\n", genero);
+             printf("Ano de lançamento: %d\n", ano);
+             printf("Plataforma: %s\n", plataforma);
+         }
+    }
+    else{
+        break;
+    }
+    }
+}
+

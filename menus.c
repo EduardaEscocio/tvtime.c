@@ -82,10 +82,10 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
             filmeAssistido(portfolio, estatisticas, login);
             break;
         case 3:
-			//visualizar estatisticas;
+            // mostrarEstatisticasDoUsuario(estatisticas, login);
             break;
         case 4:
-			//listar filmes assistidos;
+            listarFilmesAssistidos(estatisticas, login);
             break;
 
         case 0:
