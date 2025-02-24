@@ -3,9 +3,12 @@
 
 #include "filmes.h"
 #include "users.h"
-
-int menuPrincipal() {
-    int opcaoMenuPrincipal = 0;  
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas) {
+    int opcaoMenuPrincipal = 9;  
 
     printf("\n\033[0;36m");
     printf("===================================\n");
@@ -54,7 +57,7 @@ int menuUsuario(FILE *portfolio, FILE * estatisticas) {
 int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
     int opcaoMenuAdmin = 9;  
 
-	do {
+	while(opcaoMenuAdmin != 0){
 		printf("\n\033[0;36m");
 		printf("===================================\n");
 		printf("           MENU ADMIN             \n");
@@ -69,12 +72,13 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
     
 		printf("Opção: ");
     
-    if (scanf("%d", &opcaoMenuAdmin) != 1) {
-        while (getchar() != '\n');
-		system("clear");
-		printf("Error: Entrada Inválida! Digite um número valido. \n");
-    }
-	switch (opcaoMenuAdmin) {
+    scanf("%d", &opcaoMenuAdmin);
+    limparBuffer();
+    //     while (getchar() != '\n');
+	// 	system("clear");
+	// 	printf("Error: Entrada Inválida! Digite um número valido. \n");
+    // }
+	 switch (opcaoMenuAdmin) {
         case 1:
             adicionarFilme(portfolio);
             break;
@@ -87,16 +91,8 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
         case 4:
             listarFilmesAssistidos(estatisticas, login);
             break;
-
-        case 0:
-            system("clear");
-            return 0;
-			break;
-
-        }
-    } while (opcaoMenuAdmin != 0); // Repete até o usuário escolher a opção 0
-
-    return 0; // Retorna 0 para indicar que o menu foi finalizado
+    }
 }
+    return 0; // Retorna 0 para indicar que o menu foi finalizado
 
-
+}

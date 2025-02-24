@@ -191,6 +191,7 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("Erro: Arquivos ou login inválidos.\n");
         return;
     }
+    rewind(estatisticas);
 
     char linha[LINE_LENGHT];
     char nomeFilme[NAME_LENGHT];
@@ -271,6 +272,7 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
 void listarFilmesAssistidos(FILE* estatisticas, char *login){
     int encontrado;
     char linha[LINE_LENGHT];
+    rewind(estatisticas);
     while(fgets(linha, sizeof(linha), estatisticas)){
         if(strstr(linha, login)){
 
@@ -292,9 +294,6 @@ void listarFilmesAssistidos(FILE* estatisticas, char *login){
              printf("Ano de lançamento: %d\n", ano);
              printf("Plataforma: %s\n", plataforma);
          }
-    }
-    else{
-        break;
     }
     }
 }

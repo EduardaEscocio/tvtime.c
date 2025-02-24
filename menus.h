@@ -2,12 +2,7 @@
 #define MENUS_H
 
 #include <stdio.h>
-
-int opcaoMenuAdmin = 6;
-int opcaoMenuUsuario = 6;
-int opcaoMenu = 6;
-
-int menuPrincipal();
+int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas);
 int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login);
 int menuUsuario();
 #endif

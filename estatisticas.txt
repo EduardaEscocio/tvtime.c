@@ -1,10 +1,1 @@
-LucasBritoViado|Malvados|01:30:02|Terrorzinho|2010|
-LucasBritoViado|PeterPan|2:1|Infantil|2012|4|
-LucasBritoViado|Meu Malvado Favorito 2|02:12:34|Comedia|2018|2|
-LucasBritoViado|Meninas Malvadas|3:45|Comedia|2012|1|
-LucasBritoViado|Panico 4|01:23:02|Comedia|2005|2|
-LucasBritoViado|Panico 4|01:23:02|Comedia|2005|4|
-LucasBritoViado|Meninas Malvadas|3:45|Comedia|2012|Globoplay|
-LucasBritoViado|As Panteras|01:32:10|Desenho Animado|1998|HBO|
-LucasBritoViado|PeterPan|2:1|Infantil|2012|Mercado Play|
-LucasBritoViado|Meninas Malvadas|3:45|Comedia|2012|Globoplay|
+LucasBritoViado|As Panteras|01:32:10|Desenho Animado|1998|Globoplay|
