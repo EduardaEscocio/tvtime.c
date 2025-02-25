@@ -56,8 +56,8 @@ int menuUsuario(FILE *portfolio, FILE * estatisticas) {
 
 int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
     int opcaoMenuAdmin = 9;  
-
-	while(opcaoMenuAdmin != 0){
+	do{
+        
 		printf("\n\033[0;36m");
 		printf("===================================\n");
 		printf("           MENU ADMIN             \n");
@@ -74,10 +74,7 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
     
     scanf("%d", &opcaoMenuAdmin);
     limparBuffer();
-    //     while (getchar() != '\n');
-	// 	system("clear");
-	// 	printf("Error: Entrada Inválida! Digite um número valido. \n");
-    // }
+    
 	 switch (opcaoMenuAdmin) {
         case 1:
             adicionarFilme(portfolio);
@@ -92,7 +89,7 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
             listarFilmesAssistidos(estatisticas, login);
             break;
     }
-}
+} while(opcaoMenuAdmin!=0);
     return 0; // Retorna 0 para indicar que o menu foi finalizado
 
 }

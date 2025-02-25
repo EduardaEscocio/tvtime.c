@@ -184,6 +184,7 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
         return;
     }
 
+<<<<<<< Updated upstream
 	rewind(estatisticas);
 	rewind(portfolio);
 
@@ -195,6 +196,17 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
     int year;
 
     char *plataformas[PLATFORM_NUMBER] = {"Netflix", "Disney+", "Globoplay", "HBO", "Amazon Prime", "Mercado Play"};
+=======
+    char linha[LINE_LENGTH];
+    char nomeFilme[NAME_LENGTH];
+    char procuraFilme[NAME_LENGTH];
+    char duracao[10];
+    char genero[50];
+    int ano;
+    int encontrado = 0;
+    
+    char plataforma[NAME_LENGTH];
+>>>>>>> Stashed changes
     int plataformaEscolha;
     
 	printf("Qual o nome do filme que você quer adicionar como assistido? ");
@@ -231,9 +243,14 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
 }
 
 void listarFilmesAssistidos(FILE* estatisticas, char *login){
+<<<<<<< Updated upstream
     
     char linha[LINE_LENGTH];
 
+=======
+    int encontrado;
+    char linha[LINE_LENGTH];
+>>>>>>> Stashed changes
     rewind(estatisticas);
     while(fgets(linha, sizeof(linha), estatisticas)){
         
@@ -267,9 +284,15 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     }
 
     char linha[LINE_LENGTH];
+<<<<<<< Updated upstream
     char mostUsedGenre[NAME_LENGTH];
     int totalSeconds = 0;
     int maxGenreCount = 0;
+=======
+    int totalSeconds = 0; // Tempo total em segundos
+    char mostUsedGenre[50] = ""; // Gênero mais assistido
+    int maxGenreCount = 0;       // Contagem máxima de um gênero
+>>>>>>> Stashed changes
 
     rewind(estatisticas);
 
@@ -318,3 +341,56 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
 //     }
 // }
 
+<<<<<<< Updated upstream
+=======
+void sugerirFilme(FILE *portfolio, char *login) {
+    if (!portfolio || !login) {
+        printf("Erro: Erro ao abrir o arquivo, ou login invalido.\n");
+        return;
+    }
+
+    char linha[LINE_LENGTH];
+    char filmeSugeridoNome[NAME_LENGTH];
+
+    printf("Qual filme você quer sugerir?\n");
+    scanf(" %[^\n]", filmeSugeridoNome); 
+
+    rewind(portfolio);
+    while (fgets(linha, sizeof(linha), portfolio)) {
+        if (strstr(linha, filmeSugeridoNome)) {
+            printf("Filme já existente no portfólio.\n");
+            return;
+        }
+    }
+
+    Filme *novoFilme = malloc(sizeof(Filme));
+    if (!novoFilme) {
+        printf("Erro ao alocar memória.\n");
+        return;
+    }
+    strcpy(novoFilme->nome, filmeSugeridoNome);
+    novoFilme->prox = NULL;
+
+    if (inicio == NULL) {
+        inicio = novoFilme;
+    } else {
+        Filme *aux = inicio;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
+        }
+        aux->prox = novoFilme;
+    }
+
+    printf("Filme sugerido com sucesso! Iremos analisar a sua solicitação e poderemos incluir ele no catálogo em breve!     \n");
+}
+
+
+void verFilmesSugeridos(char *login){//ADM
+    Filme *aux = inicio;
+    printf("Filmes Sugeridos pelos Usuário: \n");
+    while(aux != NULL){
+        printf("Filme: %s\n", aux->nome);
+        aux = aux->prox;
+    }
+}
+>>>>>>> Stashed changes
