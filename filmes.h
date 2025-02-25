@@ -12,9 +12,8 @@ typedef struct filme {
     char duracao[DURACAO_LENGTH];
     char genero[GENERO_LENGTH];
     int ano;
-    struct filme *prox
-    
-} Filme;
+    struct filme *prox;   
+}Filme;
 
 void adicionarFilme(FILE *portfolio);
 void lerPortfolio(FILE *portfolio);

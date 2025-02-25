@@ -3,20 +3,21 @@
 
 #include <stdio.h>
 
-#define LOGIN_LENGHT 50
-#define PASSWORD_LENGHT 50
-#define NAME_LENGHT 50
-#define LINE_LENGHT 256
+#define PLATFORM_NUMBER 6
+#define LOGIN_LENGTH 50
+#define PASSWORD_LENGTH 50
+#define NAME_LENGTH 50
+#define LINE_LENGTH 256
 
 typedef struct usuario{
-    char login[LOGIN_LENGHT];
-    char senha[PASSWORD_LENGHT];
-    char nome[NAME_LENGHT];
+    char login[LOGIN_LENGTH];
+    char senha[PASSWORD_LENGTH];
+    char nome[NAME_LENGTH];
     int adminId; // 0 - comun - 1 admin
 } User;
 
 typedef struct estatisticas {
-    char login[LOGIN_LENGHT];
+    char login[LOGIN_LENGTH];
     int horasTotais;
     int minutosTotais;
 } Estatisticas;

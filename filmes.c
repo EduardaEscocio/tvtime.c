@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "filmes.h"
+#include "users.h"
 
 bool validarAno(int ano) {
     return ano > 0 && ano < 2026;
@@ -65,7 +66,7 @@ void lerPortfolio(FILE *portfolio){
 		return;
 	}
 
-	char linha[256];
+	char linha[LINE_LENGTH];
     rewind(portfolio); // Volta ao início do arquivo para garantir que ele seja lido desde o começo
 
 	printf("\n--- Catálogo de Filmes ---\n");
@@ -73,21 +74,23 @@ void lerPortfolio(FILE *portfolio){
     while (fgets(linha, sizeof(linha), portfolio) != NULL) {
 
         // Divide a linha em campos usando o delimitador "|"
-        char *nome = strtok(linha, "|");
-        char *duracao = strtok(NULL, "|");
-        char *genero = strtok(NULL, "|");
+        char *name = strtok(linha, "|");
+        char *duration = strtok(NULL, "|");
+        char *gender = strtok(NULL, "|");
         char *ano_str = strtok(NULL, "|");
 
-        // Verifica se todos os campos foram lidos corretamente
-        if (nome && duracao && genero && ano_str) {
-            int ano = atoi(ano_str); // Converte o ano para inteiro
-            printf("\nNome: %s\n", nome);
-            printf("Duração: %s\n", duracao);
-            printf("Gênero: %s\n", genero);
-            printf("Ano de lançamento: %d\n", ano);
-        } else {
-            printf("Erro: Formato inválido no arquivo.\n");
-        }
+        if (!name || !duration || !gender || !ano_str){
+			printf("Error: Formato errado dos dados");
+			continue;
+		}
+            
+		int ano = atoi(ano_str); // Converte o ano para inteiro
+        
+		printf("\nNome: %s\n", name);
+		printf("Duração: %s\n", duration);
+        printf("Gênero: %s\n", gender);
+        printf("Ano de lançamento: %d\n", ano);
+
     }
     printf("\n--- Fim do Catálogo ---\n");
 }

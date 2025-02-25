@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
 #include "users.h"
 #include "filmes.h"
 
@@ -18,7 +19,7 @@ int cadastroExiste(FILE *usuarios, char *login) {
 		return -2;
 	}
 
-	char linha[LINE_LENGHT];
+	char linha[LINE_LENGTH];
     rewind(usuarios);
     
 	while (fgets(linha, sizeof(linha), usuarios) != NULL) {
@@ -62,9 +63,9 @@ void cadastro(FILE *usuarios) {
         return;
     } 
 
-	char nome[NAME_LENGHT];
-    char login[LOGIN_LENGHT];
-    char senha[PASSWORD_LENGHT];
+	char nome[NAME_LENGTH];
+    char login[LOGIN_LENGTH];
+    char senha[PASSWORD_LENGTH];
 
     // Validação do login
     do {
@@ -110,9 +111,9 @@ char *login(FILE *usuarios) {
 		return NULL;
 	}
 
-    char linha[LINE_LENGHT];
-    char login_atual[LOGIN_LENGHT];
-    char senha_atual[PASSWORD_LENGHT];
+    char linha[LINE_LENGTH];
+    char login_atual[LOGIN_LENGTH];
+    char senha_atual[PASSWORD_LENGTH];
     int encontrado = 0;
 
     printf("Digite seu login: ");
@@ -124,9 +125,9 @@ char *login(FILE *usuarios) {
     rewind(usuarios); // Volta ao início do arquivo
 
     while (fgets(linha, sizeof(linha), usuarios)) {
-        char nomeArquivo[LOGIN_LENGHT];
-        char loginArquivo[LOGIN_LENGHT];
-        char senhaArquivo[PASSWORD_LENGHT];
+        char nomeArquivo[LOGIN_LENGTH];
+        char loginArquivo[LOGIN_LENGTH];
+        char senhaArquivo[PASSWORD_LENGTH];
         int adminId;
         
         // Extrai o nome, login, senha e adminId do arquivo
@@ -159,13 +160,13 @@ char *login(FILE *usuarios) {
 
 
 int detectarAdm(char *login, FILE *usuarios){
-    char linha[LINE_LENGHT];
+    char linha[LINE_LENGTH];
     rewind(usuarios);
 
     while (fgets(linha, sizeof(linha), usuarios)) {
-        char nomeArquivo[LOGIN_LENGHT];
-        char loginArquivo[LOGIN_LENGHT];
-        char senhaArquivo[PASSWORD_LENGHT];
+        char nomeArquivo[LOGIN_LENGTH];
+        char loginArquivo[LOGIN_LENGTH];
+        char senhaArquivo[PASSWORD_LENGTH];
         int adminId;
         // Extrai o nome, login, senha e adminId do arquivo
         if (sscanf(linha, " %[^|]|%[^|]|%[^|]|%d", loginArquivo, nomeArquivo, senhaArquivo, &adminId) == 4) {
@@ -177,102 +178,61 @@ int detectarAdm(char *login, FILE *usuarios){
     }
 }
 
-
-int converterParaInt(char *duracao){
-    int horas, minutos, segundos; 
-    if (sscanf(duracao, "%d:%d:%d", &horas, &minutos, &segundos) == 3){
-		return horas * 60 + minutos;
-	}
-	return 0;
-}
-
-
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
-    if (!portfolio || !estatisticas || !login) {
+    
+	if (!portfolio || !estatisticas || !login) {
         printf("Erro: Arquivos ou login inválidos.\n");
         return;
     }
-    rewind(estatisticas);
+	rewind(estatisticas);
+	rewind(portfolio);
 
-    char linha[LINE_LENGHT];
-    char nomeFilme[NAME_LENGHT];
-    char procuraFilme[NAME_LENGHT];
-    char duracao[10];
-    char genero[50];
-    int ano;
-    int encontrado = 0;
-    
-    char plataforma[NAME_LENGHT];
+    char linha[LINE_LENGTH];
+    char procuraFilme[NAME_LENGTH];
+    char nomeFilme[NAME_LENGTH];
+	char duration[10], gender[50];
+	int found = 0;
+    int year;
+
+    char *plataformas[PLATFORM_NUMBER] = {"Netflix", "Disney+", "Globoplay", "HBO", "Amazon Prime", "Mercado Play"};
     int plataformaEscolha;
-    // Solicita o nome do filme
-    printf("Qual o nome do filme que você quer adicionar como assistido? ");
-    scanf(" %[^\n]", nomeFilme);
-    printf("Qual plataforma você utilizou? \n");
-    printf("[1] Netflix\n");
-    printf("[2] Disney+\n");
-    printf("[3] Globoplay\n");
-    printf("[4] HBO\n");
-    printf("[5] Amazon Prime\n");
-    printf("[6] Mercado Play\n");
     
+	printf("Qual o nome do filme que você quer adicionar como assistido? ");
+    scanf(" %[^\n]", nomeFilme);
+    
+	printf("Qual plataforma você utilizou? \n");
+	for (int count = 0; count < PLATFORM_NUMBER; count++){
+		printf("[%d] %s \n", count + 1, plataformas[count]);
+	}
+
     scanf("%d", &plataformaEscolha);
-    switch (plataformaEscolha)
-    {
-    case 1:
-        strcpy(plataforma, "Netflix");
-        break;
-    case 2:
-        strcpy(plataforma, "Disney+");
-    break;
-    case 3:
-        strcpy(plataforma, "Globoplay");
-        break;
-    case 4:
-        strcpy(plataforma, "HBO");
-        break;
-    case 5:
-        strcpy(plataforma, "Amazon");
-    break;
-    case 6:
-        strcpy(plataforma, "Mercado Play");
-        break;
 
-    default:
-        break;
-    }
-    nomeFilme[strcspn(nomeFilme, "\n")] = '\0';  // Remove a nova linha deixada pelo fgets
+	if (plataformaEscolha < 1 || plataformaEscolha > sizeof(plataformas)){
+		printf("Opção inválida! \n");
+		return;
+	}
+	char *plataforma = plataformas[plataformaEscolha - 1];
 
-    // Procura o filme no portfólio
-    rewind(portfolio);
     while (fgets(linha, sizeof(linha), portfolio)) {
-        // Remove o caractere de nova linha no final da linha (se houver)
-        linha[strcspn(linha, "\n")] = '\0';
-
-        // Extrai os campos da linha
-        if (sscanf(linha, "%[^|]|%[^|]|%[^|]|%d|", procuraFilme, duracao, genero, &ano) == 4) {
-            if (strcmp(procuraFilme, nomeFilme) == 0) {  // Comparação exata do nome do filme
-                encontrado = 1;
+        
+        if (sscanf(linha, "%[^|]|%[^|]|%[^|]|%d|", procuraFilme, duration, gender, &year) == 4) {
+            if (strcmp(procuraFilme, nomeFilme) == 0) {
+                found = 1;
+                fprintf(estatisticas, "%s|%s|%s|%s|%d|%s|\n", login, procuraFilme, duration, gender, year, plataforma);
+                printf("Filme '%s' adicionado como assistido.\n", procuraFilme);
                 break;
             }
         }
-
     }
-
-    if (encontrado) {
-        // Escreve no arquivo de estatísticas
-        if (fprintf(estatisticas, "%s|%s|%s|%s|%d|%s|\n", login, procuraFilme, duracao, genero, ano, plataforma) < 0) {
-            printf("Erro: Falha ao escrever no arquivo de estatísticas.\n");
-        } else {
-            printf("Filme '%s' adicionado como assistido.\n", procuraFilme);
-        }
-    } else {
+    
+    if (!found) {
         printf("Erro: Filme '%s' não existe no catálogo atual.\n", nomeFilme);
     }
 }
 
 void listarFilmesAssistidos(FILE* estatisticas, char *login){
     int encontrado;
-    char linha[LINE_LENGHT];
+    char linha[LINE_LENGTH];
     rewind(estatisticas);
     while(fgets(linha, sizeof(linha), estatisticas)){
         if(strstr(linha, login)){
@@ -306,7 +266,7 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
         return;
     }
 
-    char linha[LINE_LENGHT];
+    char linha[LINE_LENGTH];
     int totalSeconds = 0; // Tempo total em segundos
     char mostUsedGenre[50] = ""; // Gênero mais assistido
     int maxGenreCount = 0;       // Contagem máxima de um gênero
@@ -362,18 +322,18 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     }
 }
 
-void sugerirFilme(FILE *portfolio, char *login){
-    char linha[LINE_LENGHT];
-    char filmeSugeridoNome[NAME_LENGHT];
-    Filme *filmeSugerido = malloc(sizeof(Filme));
-    printf("Qual filme você quer sugerir?\n");
-    scanf("%s", filmeSugerido);
-    while (fgets(linha, sizeof(linha), portfolio)) {
-        if(strstr(linha, filmeSugerido) > 0){
-            printf("Filme já existente no portfólio: \n");
-            lerPortfolio(portfolio);
-        }
-    }else{
-        filmeSugerido->nome
-    }
-}
+// void sugerirFilme(FILE *portfolio, char *login){
+//     char linha[LINE_LENGHT];
+//     char filmeSugeridoNome[NAME_LENGHT];
+//     Filme *filmeSugerido = malloc(sizeof(Filme));
+//     printf("Qual filme você quer sugerir?\n");
+//     scanf("%s", filmeSugerido);
+//     while (fgets(linha, sizeof(linha), portfolio)) {
+//         if(strstr(linha, filmeSugerido) > 0){
+//             printf("Filme já existente no portfólio: \n");
+//             lerPortfolio(portfolio);
+//         }
+//     }else{
+//         filmeSugerido->nome
+//     }
+// }
