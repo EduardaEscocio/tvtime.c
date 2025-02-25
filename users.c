@@ -41,7 +41,6 @@ int loginValido(char *login) {
 	
 	size_t tamanho = strlen(login);
 
-    // Verifica cada caractere do login
     for (size_t i = 0; i < tamanho; i++) {
         if (isspace((unsigned char)login[i])) {
             return 0; // Retorna 0 para indicar que o login é inválido
@@ -143,7 +142,6 @@ char *login(FILE *usuarios) {
     if (encontrado) {
         printf("Login realizado com sucesso!\n");
 
-        // Aloca memória dinamicamente para o login de retorno
         char *loginRetorno = malloc(50 * sizeof(char));
 		if (loginRetorno == NULL) {
             printf("Erro ao alocar memória.\n");
@@ -151,10 +149,10 @@ char *login(FILE *usuarios) {
         }
 
         strcpy(loginRetorno, login_atual);
-        return loginRetorno; // Retorna o ponteiro alocado dinamicamente
+        return loginRetorno; 
     } else {
         printf("Login ou senha incorretos! Tente novamente.\n");
-        return NULL; // Retorna NULL em caso de falha
+        return NULL; 
     }
 }
 
@@ -176,6 +174,7 @@ int detectarAdm(char *login, FILE *usuarios){
             }
         }
     }
+	return 0;
 }
 
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
@@ -184,6 +183,7 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("Erro: Arquivos ou login inválidos.\n");
         return;
     }
+
 	rewind(estatisticas);
 	rewind(portfolio);
 
@@ -231,82 +231,65 @@ void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login) {
 }
 
 void listarFilmesAssistidos(FILE* estatisticas, char *login){
-    int encontrado;
+    
     char linha[LINE_LENGTH];
+
     rewind(estatisticas);
     while(fgets(linha, sizeof(linha), estatisticas)){
-        if(strstr(linha, login)){
-
+        
+		if(strstr(linha, login)){
          // Divide a linha em campos usando o delimitador "|"
-        char *usuario = strtok(linha, "|");
-        char *filme = strtok(NULL, "|");
-        char *duracao = strtok(NULL, "|");
-        char *genero = strtok(NULL, "|");
-        char *ano_str = strtok(NULL, "|");
-        char *plataforma = strtok(NULL, "|");
+			char *usuario = strtok(linha, "|");
+			char *filme = strtok(NULL, "|");
+			char *duracao = strtok(NULL, "|");
+			char *genero = strtok(NULL, "|");
+			char *ano_str = strtok(NULL, "|");
+			char *plataforma = strtok(NULL, "|");
 
  
          // Verifica se todos os campos foram lidos corretamente
          if (filme && duracao && genero && ano_str && plataforma) {
-             int ano = atoi(ano_str); // Converte o ano para inteiro
-             printf("\nNome do filme: %s\n", filme);
-             printf("Duração: %s\n", duracao);
-             printf("Gênero: %s\n", genero);
-             printf("Ano de lançamento: %d\n", ano);
-             printf("Plataforma: %s\n", plataforma);
-         }
-    }
-    }
+				int ano = atoi(ano_str);
+
+				printf("\n Nome do filme: %s \n Duração: %s \n Gênero: %s \n Ano de lançamento: %d \n Plataforma: %s \n", 
+				filme, duracao, genero, ano, plataforma);
+			}
+
+		}
+	}
 }
 
 
 void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     if (!estatisticas || !login) {
-        printf("Erro: Arquivos ou login inválidos.\n");
+        printf("Erro: Arquivo ou login inválido.\n");
         return;
     }
 
     char linha[LINE_LENGTH];
-    int totalSeconds = 0; // Tempo total em segundos
-    char mostUsedGenre[50] = ""; // Gênero mais assistido
-    int maxGenreCount = 0;       // Contagem máxima de um gênero
+    char mostUsedGenre[NAME_LENGTH];
+    int totalSeconds = 0;
+    int maxGenreCount = 0;
 
-    // Reinicia o ponteiro do arquivo para o início
     rewind(estatisticas);
 
     while (fgets(linha, sizeof(linha), estatisticas)) {
-        char usuario[50], filme[50], tempo[50], genero[50], ano[50];
+        char usuario[NAME_LENGTH], filme[NAME_LENGTH], tempo[50], genero[NAME_LENGTH], ano[50];
 
-        // Extrai os campos da linha
-        sscanf(linha, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]", usuario, filme, tempo, genero, ano);
+        if (sscanf(linha, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]", usuario, filme, tempo, genero, ano) < 5) {
+            continue;
+        }
 
-        // Verifica se a linha pertence ao usuário
         if (strcmp(usuario, login) == 0) {
-            // Extrai horas, minutos e segundos do tempo
-            int hours, minutes, seconds;
-            sscanf(tempo, "%d:%d:%d", &hours, &minutes, &seconds);
-
-            // Converte o tempo para segundos e soma ao total
+            
+			int hours, minutes, seconds;
+            
+			sscanf(tempo, "%d:%d:%d", &hours, &minutes, &seconds);
             totalSeconds += hours * 3600 + minutes * 60 + seconds;
 
-            // Conta a frequência do gênero
-            int genreCount = 1; // Inicia a contagem do gênero atual
-            for (int i = 0; i < strlen(linha); i++) {
-                if (strstr(linha + i, genero) == linha + i) {
-                    genreCount++;
-                    i += strlen(genero) - 1;
-                }
-            }
-
-            // Atualiza o gênero mais assistido
-            if (genreCount > maxGenreCount) {
-                maxGenreCount = genreCount;
-                strcpy(mostUsedGenre, genero);
-            }
         }
     }
 
-    // Converte o tempo total de segundos para HH:MM:SS
     int totalHours = totalSeconds / 3600;
     int remainingSeconds = totalSeconds % 3600;
     int totalMinutes = remainingSeconds / 60;
@@ -315,11 +298,8 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     // Exibe as estatísticas
     printf("Estatisticas do Usuario: %s\n", login);
     printf("Tempo total de uso: %02d:%02d:%02d\n", totalHours, totalMinutes, finalSeconds);
-    if (maxGenreCount > 0) {
-        printf("Genero mais assistido: %s\n", mostUsedGenre);
-    } else {
-        printf("Nenhum genero registrado.\n");
-    }
+    printf("Genero mais assistido: %s\n", mostUsedGenre);
+    
 }
 
 // void sugerirFilme(FILE *portfolio, char *login){
@@ -337,3 +317,4 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
 //         filmeSugerido->nome
 //     }
 // }
+
