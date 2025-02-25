@@ -34,15 +34,15 @@ typedef struct estatisticas {
 void cadastro(FILE *usuarios); //
 char *login(FILE *usuarios); //
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login); //
-int loginValido(char *login); //
-int converterParaInt(char *duracao); //
-int detectarAdm(char *login, FILE *usuarios); //
-int cadastroExiste(FILE *usuarios, char *login); //
+int  loginValido(char *login); //
+int  converterParaInt(char *duracao); //
+int  detectarAdm(char *login, FILE *usuarios); //
+int  cadastroExiste(FILE *usuarios, char *login); //
 void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login);
 void listarFilmesAssistidos(FILE *estatisticas, char *login);
 void lerPortfolio(FILE *portfolio);
 void sugerirFilme(FILE *portfolio, char *login);
-
+void verFilmesSugeridos(char *login);
 
 #endif
 

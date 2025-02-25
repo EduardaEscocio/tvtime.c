@@ -322,18 +322,55 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     }
 }
 
-// void sugerirFilme(FILE *portfolio, char *login){
-//     char linha[LINE_LENGHT];
-//     char filmeSugeridoNome[NAME_LENGHT];
-//     Filme *filmeSugerido = malloc(sizeof(Filme));
-//     printf("Qual filme você quer sugerir?\n");
-//     scanf("%s", filmeSugerido);
-//     while (fgets(linha, sizeof(linha), portfolio)) {
-//         if(strstr(linha, filmeSugerido) > 0){
-//             printf("Filme já existente no portfólio: \n");
-//             lerPortfolio(portfolio);
-//         }
-//     }else{
-//         filmeSugerido->nome
-//     }
-// }
+Filme *inicio = NULL;
+
+void sugerirFilme(FILE *portfolio, char *login) {
+    if (!portfolio || !login) {
+        printf("Erro: Erro ao abrir o arquivo, ou login invalido.\n");
+        return;
+    }
+
+    char linha[LINE_LENGTH];
+    char filmeSugeridoNome[NAME_LENGTH];
+
+    printf("Qual filme você quer sugerir?\n");
+    scanf(" %[^\n]", filmeSugeridoNome); 
+
+    rewind(portfolio);
+    while (fgets(linha, sizeof(linha), portfolio)) {
+        if (strstr(linha, filmeSugeridoNome)) {
+            printf("Filme já existente no portfólio.\n");
+            return;
+        }
+    }
+
+    Filme *novoFilme = malloc(sizeof(Filme));
+    if (!novoFilme) {
+        printf("Erro ao alocar memória.\n");
+        return;
+    }
+    strcpy(novoFilme->nome, filmeSugeridoNome);
+    novoFilme->prox = NULL;
+
+    if (inicio == NULL) {
+        inicio = novoFilme;
+    } else {
+        Filme *aux = inicio;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
+        }
+        aux->prox = novoFilme;
+    }
+
+    printf("Filme sugerido com sucesso! Iremos analisar a sua solicitação e poderemos incluir ele no catálogo em breve!     \n");
+}
+
+
+void verFilmesSugeridos(char *login){//ADM
+    Filme *aux = inicio;
+    printf("Filmes Sugeridos pelos Usuário: \n");
+    while(aux != NULL){
+        printf("Filme: %s\n", aux->nome);
+        aux = aux->prox;
+    }
+}
