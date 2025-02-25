@@ -15,6 +15,8 @@ typedef struct usuario{
     int adminId; // 0 - comun - 1 admin
 } User;
 
+
+
 typedef struct estatisticas {
     char login[LOGIN_LENGHT];
     int horasTotais;
@@ -41,7 +43,7 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login);
 void listarFilmesAssistidos(FILE *estatisticas, char *login);
 void lerPortfolio(FILE *portfolio);
 void sugerirFilme(FILE *portfolio, char *login);
-
+void verFilmesSugeridos(char *login);
 
 #endif
 

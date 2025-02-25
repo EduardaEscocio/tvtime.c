@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "filmes.h"
 #include "users.h"
 void limparBuffer() {
@@ -30,9 +29,9 @@ int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas) {
     }
 	return opcaoMenuPrincipal;
 }
-int menuUsuario(FILE *portfolio, FILE * estatisticas) {
+int menuUsuario(FILE *portfolio, FILE * estatisticas, char *login) {
     int opcaoMenuUsuario = 9;  
-
+    do{
     printf("\n\033[0;36m");
     printf("===================================\n");
     printf("           MENU USUÁRIO             \n");
@@ -40,6 +39,7 @@ int menuUsuario(FILE *portfolio, FILE * estatisticas) {
     printf("\t[1] - Adicionar filme como assistido\n");
     printf("\t[2] - Visualizar estatísticas\n");
     printf("\t[3] - Listar filmes assistidos\n");
+    printf("\t[4] - Sugerir um filme para nosso portfólio\n");
     printf("\t[0] - Sair\n");
     printf("===================================\n");
     printf("\033[0m");
@@ -51,7 +51,24 @@ int menuUsuario(FILE *portfolio, FILE * estatisticas) {
 	    system("clear");
         return -1;
     }
-    return opcaoMenuUsuario;
+    switch (opcaoMenuUsuario) {
+        case 1:
+            filmeAssistido(portfolio, estatisticas, login);
+            break;
+        case 2:
+            mostrarEstatisticasDoUsuario(estatisticas, login);
+            break;
+        case 3:
+            listarFilmesAssistidos(estatisticas, login);
+            break;
+        case 4:
+            sugerirFilme(portfolio, login);
+            break;
+    }
+    }while (opcaoMenuUsuario!=0);
+
+    return 0; // Retorna 0 para indicar que o menu foi finalizado
+
 }
 
 int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
@@ -66,6 +83,7 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
 		printf("\t[2] - Adicionar filme como assistido\n");
 		printf("\t[3] - Visualizar estatísticas\n");
 		printf("\t[4] - Listar filmes assistidos\n");
+		printf("\t[5] - Ver filmes sugeridos pelos usuários\n");
 		printf("\t[0] - Sair\n");
 		printf("===================================\n");
 		printf("\033[0m");
@@ -91,6 +109,8 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
         case 4:
             listarFilmesAssistidos(estatisticas, login);
             break;
+        case 5:
+            verFilmesSugeridos(login);
     }
 }
     return 0; // Retorna 0 para indicar que o menu foi finalizado

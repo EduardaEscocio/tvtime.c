@@ -12,7 +12,7 @@ typedef struct filme {
     char duracao[DURACAO_LENGTH];
     char genero[GENERO_LENGTH];
     int ano;
-    struct filme *prox
+    struct filme *prox;
     
 } Filme;
 

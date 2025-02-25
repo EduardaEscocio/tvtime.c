@@ -38,7 +38,7 @@ int main() {
                     int id = detectarAdm(usuario, usuarios);
 
                     if (id == 0) {
-                            opcaoMenuUsuario = menuUsuario(portfolio);
+                            opcaoMenuUsuario = menuUsuario(portfolio, estatisticas, usuario);
                     } else {
                         
                         opcaoMenuAdmin = menuAdmin(portfolio, estatisticas, usuario);

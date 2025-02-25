@@ -4,5 +4,6 @@
 #include <stdio.h>
 int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas);
 int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login);
-int menuUsuario();
+int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login);
+
 #endif
