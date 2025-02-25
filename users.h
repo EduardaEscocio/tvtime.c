@@ -21,6 +21,15 @@ typedef struct estatisticas {
     int minutosTotais;
 } Estatisticas;
 
+// typedef struct filme {
+//     char nome[NAME_LENGHT];
+//     char duracao[DURACAO_LENGHT];
+//     char genero[GENERO_LENGHT];
+//     int ano;
+//     struct filme *prox
+    
+// } Filme;
+
 void cadastro(FILE *usuarios); //
 char *login(FILE *usuarios); //
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login); //
@@ -30,6 +39,9 @@ int detectarAdm(char *login, FILE *usuarios); //
 int cadastroExiste(FILE *usuarios, char *login); //
 void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login);
 void listarFilmesAssistidos(FILE *estatisticas, char *login);
+void lerPortfolio(FILE *portfolio);
+void sugerirFilme(FILE *portfolio, char *login);
+
 
 #endif
 

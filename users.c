@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "users.h"
+#include "filmes.h"
 
 int cadastroExiste(FILE *usuarios, char *login) {
     
@@ -298,3 +299,81 @@ void listarFilmesAssistidos(FILE* estatisticas, char *login){
     }
 }
 
+
+void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
+    if (!estatisticas || !login) {
+        printf("Erro: Arquivos ou login inválidos.\n");
+        return;
+    }
+
+    char linha[LINE_LENGHT];
+    int totalSeconds = 0; // Tempo total em segundos
+    char mostUsedGenre[50] = ""; // Gênero mais assistido
+    int maxGenreCount = 0;       // Contagem máxima de um gênero
+
+    // Reinicia o ponteiro do arquivo para o início
+    rewind(estatisticas);
+
+    while (fgets(linha, sizeof(linha), estatisticas)) {
+        char usuario[50], filme[50], tempo[50], genero[50], ano[50];
+
+        // Extrai os campos da linha
+        sscanf(linha, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]", usuario, filme, tempo, genero, ano);
+
+        // Verifica se a linha pertence ao usuário
+        if (strcmp(usuario, login) == 0) {
+            // Extrai horas, minutos e segundos do tempo
+            int hours, minutes, seconds;
+            sscanf(tempo, "%d:%d:%d", &hours, &minutes, &seconds);
+
+            // Converte o tempo para segundos e soma ao total
+            totalSeconds += hours * 3600 + minutes * 60 + seconds;
+
+            // Conta a frequência do gênero
+            int genreCount = 1; // Inicia a contagem do gênero atual
+            for (int i = 0; i < strlen(linha); i++) {
+                if (strstr(linha + i, genero) == linha + i) {
+                    genreCount++;
+                    i += strlen(genero) - 1;
+                }
+            }
+
+            // Atualiza o gênero mais assistido
+            if (genreCount > maxGenreCount) {
+                maxGenreCount = genreCount;
+                strcpy(mostUsedGenre, genero);
+            }
+        }
+    }
+
+    // Converte o tempo total de segundos para HH:MM:SS
+    int totalHours = totalSeconds / 3600;
+    int remainingSeconds = totalSeconds % 3600;
+    int totalMinutes = remainingSeconds / 60;
+    int finalSeconds = remainingSeconds % 60;
+
+    // Exibe as estatísticas
+    printf("Estatisticas do Usuario: %s\n", login);
+    printf("Tempo total de uso: %02d:%02d:%02d\n", totalHours, totalMinutes, finalSeconds);
+    if (maxGenreCount > 0) {
+        printf("Genero mais assistido: %s\n", mostUsedGenre);
+    } else {
+        printf("Nenhum genero registrado.\n");
+    }
+}
+
+void sugerirFilme(FILE *portfolio, char *login){
+    char linha[LINE_LENGHT];
+    char filmeSugeridoNome[NAME_LENGHT];
+    Filme *filmeSugerido = malloc(sizeof(Filme));
+    printf("Qual filme você quer sugerir?\n");
+    scanf("%s", filmeSugerido);
+    while (fgets(linha, sizeof(linha), portfolio)) {
+        if(strstr(linha, filmeSugerido) > 0){
+            printf("Filme já existente no portfólio: \n");
+            lerPortfolio(portfolio);
+        }
+    }else{
+        filmeSugerido->nome
+    }
+}
