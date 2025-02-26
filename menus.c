@@ -16,7 +16,7 @@ int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas) {
     printf("===================================\n");
     printf("\t[1] - Cadastro\n");
     printf("\t[2] - Login\n");
-    printf("\t[3] - Ler portfólio de filmes\n");
+    printf("\t[3] - Filmes\n");
     printf("\t[0] - Sair\n");
     printf("===================================\n");
     printf("\033[0m");
@@ -40,8 +40,8 @@ int menuUsuario(FILE *portfolio, FILE * estatisticas, char *login) {
     printf("           MENU USUÁRIO             \n");
     printf("===================================\n");
     printf("\t[1] - Adicionar filme como assistido\n");
-    printf("\t[2] - Visualizar estatísticas\n");
-    printf("\t[3] - Listar filmes assistidos\n");
+    printf("\t[2] - Estatísticas\n");
+    printf("\t[3] - Filmes assistidos\n");
     printf("\t[0] - Sair\n");
     printf("===================================\n");
     printf("\033[0m");
@@ -79,13 +79,13 @@ int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
 	while(opcaoMenuAdmin != 0){
 		printf("\n\033[0;36m");
 		printf("===================================\n");
-		printf("           MENU ADMIN             \n");
+		printf("           MENU ADMINISTRADOR            \n");
 		printf("===================================\n");
 		printf("\t[1] - Adicionar novo filme\n");
 		printf("\t[2] - Adicionar filme como assistido\n");
-		printf("\t[3] - Visualizar estatísticas\n");
-		printf("\t[4] - Listar filmes assistidos\n");
-		printf("\t[5] - Ver filmes sugeridos pelos usuários\n");
+		printf("\t[3] - Estatísticas\n");
+		printf("\t[4] - Filmes assistidos\n");
+		printf("\t[5] - Filmes sugeridos pelos usuários\n");
 		printf("\t[0] - Sair\n");
 		printf("===================================\n");
 		printf("\033[0m");

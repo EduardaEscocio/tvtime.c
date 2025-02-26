@@ -9,7 +9,7 @@ int main() {
     int opcaoMenu = -1;  // Inicializa com um valor diferente de 0 para entrar no loop
     int opcaoMenuUsuario, opcaoMenuAdmin;
 
-    // Abre os arquivos uma única vez
+    // Abre os arquivos 
     FILE *estatisticas = fopen("./estatisticas.txt", "a+");
     FILE *portfolio = fopen("./portfolio.txt", "a+");
     FILE *usuarios = fopen("./usuarios.txt", "a+");
