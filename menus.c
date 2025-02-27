@@ -46,10 +46,11 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
         
         printf("Opção: ");
         
-       
-            
+        if (scanf("%d", &opcaoMenuUsuario) != 1) {
             opcaoMenuUsuario = -1;
-        } else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
+
+        }     
+        else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
             system("clear");
             printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
         } else {

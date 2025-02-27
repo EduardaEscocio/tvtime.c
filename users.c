@@ -262,25 +262,26 @@ void listarFilmesAssistidos(FILE* estatisticas, char *login){
 
 void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     if (!estatisticas || !login) {
-        printf("Erro: Arquivos ou login inválidos.\n");
+        printf("Erro: Arquivos ou login inválidos.\n");
         return;
     }
 
     char linha[LINE_LENGTH];
-    int totalSeconds = 0; // Tempo total em segundos
-    char mostUsedGenre[50] = ""; // Gênero mais assistido
-    int maxGenreCount = 0;       // Contagem máxima de um gênero
-
-    // Reinicia o ponteiro do arquivo para o início
+    int totalSeconds = 0;
+    int maxGenreCount = 0;
+	int maxPlatformCount = 0;
+	char mostUsedGenre[50];
+    char mostUsedPlatform[50];
+	
     rewind(estatisticas);
 
     while (fgets(linha, sizeof(linha), estatisticas)) {
-        char usuario[50], filme[50], tempo[50], genero[50], ano[50];
+        char usuario[50], filme[50], tempo[50], genero[50], ano[50], plataforma[50];
 
         // Extrai os campos da linha
-        sscanf(linha, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]", usuario, filme, tempo, genero, ano);
+        sscanf(linha, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%[^|]", usuario, filme, tempo, genero, ano, plataforma);
 
-        // Verifica se a linha pertence ao usuário
+        // Verifica se a linha pertence ao usuário
         if (strcmp(usuario, login) == 0) {
             // Extrai horas, minutos e segundos do tempo
             int hours, minutes, seconds;
@@ -289,20 +290,6 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
             // Converte o tempo para segundos e soma ao total
             totalSeconds += hours * 3600 + minutes * 60 + seconds;
 
-            // Conta a frequência do gênero
-            int genreCount = 1; // Inicia a contagem do gênero atual
-            for (int i = 0; i < strlen(linha); i++) {
-                if (strstr(linha + i, genero) == linha + i) {
-                    genreCount++;
-                    i += strlen(genero) - 1;
-                }
-            }
-
-            // Atualiza o gênero mais assistido
-            if (genreCount > maxGenreCount) {
-                maxGenreCount = genreCount;
-                strcpy(mostUsedGenre, genero);
-            }
         }
     }
 
@@ -312,14 +299,21 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     int totalMinutes = remainingSeconds / 60;
     int finalSeconds = remainingSeconds % 60;
 
-    // Exibe as estatísticas
+    // Exibe as estatísticas
     printf("Estatisticas do Usuario: %s\n", login);
     printf("Tempo total de uso: %02d:%02d:%02d\n", totalHours, totalMinutes, finalSeconds);
-    if (maxGenreCount > 0) {
+    
+	if (maxGenreCount > 0) {
         printf("Genero mais assistido: %s\n", mostUsedGenre);
     } else {
         printf("Nenhum genero registrado.\n");
     }
+    if (maxPlatformCount > 0) {
+        printf("Plataforma mais usada: %s\n", mostUsedPlatform);
+    } else {
+        printf("Nenhuma plataforma registrada.\n");
+    }
+
 }
 
 Filme *inicio = NULL;
