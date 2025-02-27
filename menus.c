@@ -3,118 +3,133 @@
 
 #include "filmes.h"
 #include "users.h"
-void limparBuffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
+
 int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas) {
-    int opcaoMenuPrincipal = 9;  
+    int opcaoMenuPrincipal = -1;  
 
-    printf("\n\033[0;36m");
-    printf("===================================\n");
-    printf("          MENU PRINCIPAL          \n");
-    printf("===================================\n");
-    printf("\t[1] - Cadastro\n");
-    printf("\t[2] - Login\n");
-    printf("\t[3] - Filmes\n");
-    printf("\t[0] - Sair\n");
-    printf("===================================\n");
-    printf("\033[0m");
-    
-    printf("Opção: ");
-    
-    if (scanf("%d", &opcaoMenuPrincipal) != 1) {
-        while (getchar() != '\n');  
-	    system("clear");
-        return -1;  
+    while (opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 3) {
+        printf("\n\033[0;36m");
+        printf("===================================\n");
+        printf("          MENU PRINCIPAL          \n");
+        printf("===================================\n");
+        printf("\t[1] - Cadastro\n");
+        printf("\t[2] - Login\n");
+        printf("\t[3] - Filmes\n");
+        printf("\t[0] - Sair\n");
+        printf("===================================\n");
+        printf("\033[0m");
+        
+        printf("Opção: ");
+        
+        if (scanf("%d", &opcaoMenuPrincipal) != 1) {
+            while (getchar() != '\n');  
+            system("clear");
+            printf("Error: Entrada Inválida! Digite um número válido. \n");
+            opcaoMenuPrincipal = -1;  
+        } else if (opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 3) {
+            system("clear");
+            printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
+        }
     }
-	return opcaoMenuPrincipal;
+    return opcaoMenuPrincipal;
 }
-int menuUsuario(FILE *portfolio, FILE * estatisticas, char *login) {
-    int opcaoMenuUsuario = 9;  
-	
-	do{
 
-    printf("\n\033[0;36m");
-    printf("===================================\n");
-    printf("           MENU USUÁRIO             \n");
-    printf("===================================\n");
-    printf("\t[1] - Adicionar filme como assistido\n");
-    printf("\t[2] - Estatísticas\n");
-    printf("\t[3] - Filmes assistidos\n");
-    printf("\t[0] - Sair\n");
-    printf("===================================\n");
-    printf("\033[0m");
+int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
+    int opcaoMenuUsuario = -1;  
     
-    printf("Opção: ");
-    
-    if (scanf("%d", &opcaoMenuUsuario) != 1) {
-        while (getchar() != '\n');
-	    system("clear");
-        return -1;
+    while (opcaoMenuUsuario != 0) {
+        printf("\n\033[0;36m");
+        printf("===================================\n");
+        printf("           MENU USUÁRIO             \n");
+        printf("===================================\n");
+        printf("\t[1] - Adicionar filme como assistido\n");
+        printf("\t[2] - Estatísticas\n");
+        printf("\t[3] - Filmes assistidos\n");
+        printf("\t[0] - Sair\n");
+        printf("===================================\n");
+        printf("\033[0m");
+        
+        printf("Opção: ");
+        
+        if (scanf("%d", &opcaoMenuUsuario) != 1) {
+            while (getchar() != '\n');
+            system("clear");
+            printf("Error: Entrada Inválida! Digite um número válido. \n");
+            opcaoMenuUsuario = -1;
+        } else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
+            system("clear");
+            printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
+        } else {
+            switch (opcaoMenuUsuario) {
+                case 1:
+                    filmeAssistido(portfolio, estatisticas, login);
+                    break;
+                case 2:
+                    mostrarEstatisticasDoUsuario(estatisticas, login);
+                    break;
+                case 3:
+                    listarFilmesAssistidos(estatisticas, login);
+                    break;
+                case 0:
+                    break;
+                default:
+                    printf("Error: Opção inválida! \n");
+            }
+        }
     }
-	switch (opcaoMenuUsuario) {
-        case 1:
-            filmeAssistido(portfolio, estatisticas, login);
-            break;
-        case 2:
-            mostrarEstatisticasDoUsuario(estatisticas, login);
-            break;
-        case 3:
-            listarFilmesAssistidos(estatisticas, login);
-            break;
-        case 4:
-            sugerirFilme(portfolio, login);
-            break;
-    }
-
-    }while (opcaoMenuUsuario!=0);
-
     return opcaoMenuUsuario;
 }
 
-int menuAdmin(FILE *portfolio, FILE * estatisticas, char *login) {
-    int opcaoMenuAdmin = 9;  
+int menuAdmin(FILE *portfolio, FILE *estatisticas, char *login) {
+    int opcaoMenuAdmin = -1;  
 
-	while(opcaoMenuAdmin != 0){
-		printf("\n\033[0;36m");
-		printf("===================================\n");
-		printf("           MENU ADMINISTRADOR            \n");
-		printf("===================================\n");
-		printf("\t[1] - Adicionar novo filme\n");
-		printf("\t[2] - Adicionar filme como assistido\n");
-		printf("\t[3] - Estatísticas\n");
-		printf("\t[4] - Filmes assistidos\n");
-		printf("\t[5] - Filmes sugeridos pelos usuários\n");
-		printf("\t[0] - Sair\n");
-		printf("===================================\n");
-		printf("\033[0m");
-    
-		printf("Opção: ");
-    
-    scanf("%d", &opcaoMenuAdmin);
-    limparBuffer();
-    //     while (getchar() != '\n');
-	// 	system("clear");
-	// 	printf("Error: Entrada Inválida! Digite um número valido. \n");
-    // }
-	 switch (opcaoMenuAdmin) {
-        case 1:
-            adicionarFilme(portfolio);
-            break;
-        case 2:
-            filmeAssistido(portfolio, estatisticas, login);
-            break;
-        case 3:
-            mostrarEstatisticasDoUsuario(estatisticas, login);
-            break;
-        case 4:
-            listarFilmesAssistidos(estatisticas, login);
-            break;
-		case 5:
-            verFilmesSugeridos(login);
+    while (opcaoMenuAdmin != 0) {
+        printf("\n\033[0;36m");
+        printf("===================================\n");
+        printf("           MENU ADMINISTRADOR            \n");
+        printf("===================================\n");
+        printf("\t[1] - Adicionar novo filme\n");
+        printf("\t[2] - Adicionar filme como assistido\n");
+        printf("\t[3] - Estatísticas\n");
+        printf("\t[4] - Filmes assistidos\n");
+        printf("\t[5] - Filmes sugeridos pelos usuários\n");
+        printf("\t[0] - Sair\n");
+        printf("===================================\n");
+        printf("\033[0m");
+        
+        printf("Opção: ");
+        
+        if (scanf("%d", &opcaoMenuAdmin) != 1) {
+            while (getchar() != '\n');
+            system("clear");
+            printf("Error: Entrada Inválida! Digite um número válido. \n");
+            opcaoMenuAdmin = -1;
+        } else if (opcaoMenuAdmin < 0 || opcaoMenuAdmin > 5) {
+            system("clear");
+            printf("Error: Opção inválida! Digite um número entre 0 e 5. \n");
+        } else {
+            switch (opcaoMenuAdmin) {
+                case 1:
+                    adicionarFilme(portfolio);
+                    break;
+                case 2:
+                    filmeAssistido(portfolio, estatisticas, login);
+                    break;
+                case 3:
+                    mostrarEstatisticasDoUsuario(estatisticas, login);
+                    break;
+                case 4:
+                    listarFilmesAssistidos(estatisticas, login);
+                    break;
+                case 5:
+                    verFilmesSugeridos(login);
+                    break;
+                case 0:
+                    break;
+                default:
+                    printf("Error: Opção inválida! \n");
+            }
+        }
     }
-}
     return 0; // Retorna 0 para indicar que o menu foi finalizado
-
 }
