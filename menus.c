@@ -20,19 +20,14 @@ int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas) {
         printf("\033[0m");
         
         printf("Opção: ");
+        scanf("%d", &opcaoMenuPrincipal);
         
-        if (scanf("%d", &opcaoMenuPrincipal) != 1) {
-            while (getchar() != '\n');  
-            system("clear");
-            printf("Error: Entrada Inválida! Digite um número válido. \n");
-            opcaoMenuPrincipal = -1;  
-        } else if (opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 3) {
+        }if (opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 3) {
             system("clear");
             printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
         }
+        return opcaoMenuPrincipal;
     }
-    return opcaoMenuPrincipal;
-}
 
 int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
     int opcaoMenuUsuario = -1;  
@@ -51,10 +46,8 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
         
         printf("Opção: ");
         
-        if (scanf("%d", &opcaoMenuUsuario) != 1) {
-            while (getchar() != '\n');
-            system("clear");
-            printf("Error: Entrada Inválida! Digite um número válido. \n");
+       
+            
             opcaoMenuUsuario = -1;
         } else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
             system("clear");
@@ -100,9 +93,7 @@ int menuAdmin(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("Opção: ");
         
         if (scanf("%d", &opcaoMenuAdmin) != 1) {
-            while (getchar() != '\n');
-            system("clear");
-            printf("Error: Entrada Inválida! Digite um número válido. \n");
+            
             opcaoMenuAdmin = -1;
         } else if (opcaoMenuAdmin < 0 || opcaoMenuAdmin > 5) {
             system("clear");
