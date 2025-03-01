@@ -40,6 +40,7 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("\t[1] - Adicionar filme como assistido\n");
         printf("\t[2] - Estatísticas\n");
         printf("\t[3] - Filmes assistidos\n");
+        printf("\t[4] - Sugerir filmes\n");
         printf("\t[0] - Sair\n");
         printf("===================================\n");
         printf("\033[0m");
@@ -48,8 +49,7 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
         
        
             
-            opcaoMenuUsuario = -1;
-        } else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
+            if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
             system("clear");
             printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
         } else {
@@ -62,6 +62,9 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
                     break;
                 case 3:
                     listarFilmesAssistidos(estatisticas, login);
+                    break;
+                case 4:
+                    sugerirFilme(portfolio, login);
                     break;
                 case 0:
                     break;

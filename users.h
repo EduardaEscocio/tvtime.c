@@ -22,15 +22,6 @@ typedef struct estatisticas {
     int minutosTotais;
 } Estatisticas;
 
-// typedef struct filme {
-//     char nome[NAME_LENGHT];
-//     char duracao[DURACAO_LENGHT];
-//     char genero[GENERO_LENGHT];
-//     int ano;
-//     struct filme *prox
-    
-// } Filme;
-
 void cadastro(FILE *usuarios); //
 char *login(FILE *usuarios); //
 void filmeAssistido(FILE *portfolio, FILE *estatisticas, char *login); //
