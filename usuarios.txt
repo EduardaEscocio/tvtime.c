@@ -1,12 +1,7 @@
-LucasBritoViado|Lucas Brito|lucasviado|1
+LucasBrito|Lucas Brito|lucas3892|1
 Eduardadada|Eduarda Escocio |eduarda|0
-aaaaa|aaa|aaaa|0
-bbbb|bbb|bb|0
 PedeAcelora|Eduarda|morango|0
-gustavo|gustavin|gusta|0
-tiago|tiaguinho|321|0
-Gustavo|tiagi gsdgs|sdfsdf|0
-gustavomoreiradev3245@gmail.com|gustavo|gusta|0
-lucas brito|lucas brito|gusta|0
-lucasbroto|Lucasbritinho|gustavo|0
+gusta|Gustavo Moreira|gusta|0
+gustavin|Gustavo Braga|321|0
+thiti|Thiago Ferreira|1234512|0
 Galileu|Galileu Galilei|astronomia|0

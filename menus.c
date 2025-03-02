@@ -22,12 +22,13 @@ int menuPrincipal(FILE *portfolio, FILE *usuarios, FILE *estatisticas) {
         printf("Opção: ");
         scanf("%d", &opcaoMenuPrincipal);
         
-        }if (opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 3) {
+        if (opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 3) {
             system("clear");
             printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
         }
-        return opcaoMenuPrincipal;
     }
+    return opcaoMenuPrincipal;
+}
 
 int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
     int opcaoMenuUsuario = -1;  
@@ -35,7 +36,7 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
     while (opcaoMenuUsuario != 0) {
         printf("\n\033[0;36m");
         printf("===================================\n");
-        printf("           MENU USUÁRIO             \n");
+        printf("           MENU USUÁRIO           \n");
         printf("===================================\n");
         printf("\t[1] - Adicionar filme como assistido\n");
         printf("\t[2] - Estatísticas\n");
@@ -46,17 +47,12 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("\033[0m");
         
         printf("Opção: ");
-        
-       
-            
-            if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
         if (scanf("%d", &opcaoMenuUsuario) != 1) {
             opcaoMenuUsuario = -1;
-
-        }     
-        else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 3) {
+            while (getchar() != '\n'); // Limpar o buffer de entrada
+        } else if (opcaoMenuUsuario < 0 || opcaoMenuUsuario > 4) {
             system("clear");
-            printf("Error: Opção inválida! Digite um número entre 0 e 3. \n");
+            printf("Error: Opção inválida! Digite um número entre 0 e 4. \n");
         } else {
             switch (opcaoMenuUsuario) {
                 case 1:
@@ -83,11 +79,11 @@ int menuUsuario(FILE *portfolio, FILE *estatisticas, char *login) {
 
 int menuAdmin(FILE *portfolio, FILE *estatisticas, char *login) {
     int opcaoMenuAdmin = -1;  
-
-    while (opcaoMenuAdmin != 0) {
+    
+    while(opcaoMenuAdmin != 0) {
         printf("\n\033[0;36m");
         printf("===================================\n");
-        printf("           MENU ADMINISTRADOR            \n");
+        printf("        MENU ADMINISTRADOR        \n");
         printf("===================================\n");
         printf("\t[1] - Adicionar novo filme\n");
         printf("\t[2] - Adicionar filme como assistido\n");
@@ -99,10 +95,9 @@ int menuAdmin(FILE *portfolio, FILE *estatisticas, char *login) {
         printf("\033[0m");
         
         printf("Opção: ");
-        
         if (scanf("%d", &opcaoMenuAdmin) != 1) {
-            
             opcaoMenuAdmin = -1;
+            while (getchar() != '\n'); // Limpar o buffer de entrada
         } else if (opcaoMenuAdmin < 0 || opcaoMenuAdmin > 5) {
             system("clear");
             printf("Error: Opção inválida! Digite um número entre 0 e 5. \n");
@@ -130,5 +125,7 @@ int menuAdmin(FILE *portfolio, FILE *estatisticas, char *login) {
             }
         }
     }
-    return 0; // Retorna 0 para indicar que o menu foi finalizado
+    return opcaoMenuAdmin;
 }
+
+
