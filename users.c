@@ -268,11 +268,11 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
 
     char linha[LINE_LENGTH];
     int totalSeconds = 0;
-    int maxGenreCount = 0;
-	int maxPlatformCount = 0;
-	char mostUsedGenre[50];
-    char mostUsedPlatform[50];
-	
+    GenreCount genres[MAX_GENRES] = {0}; // Inicializa o array de gêneros
+    PlatformCount platforms[MAX_PLATFORMS] = {0}; // Inicializa o array de plataformas
+    int genreCount = 0;
+    int platformCount = 0;
+
     rewind(estatisticas);
 
     while (fgets(linha, sizeof(linha), estatisticas)) {
@@ -290,6 +290,37 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
             // Converte o tempo para segundos e soma ao total
             totalSeconds += hours * 3600 + minutes * 60 + seconds;
 
+            // Contagem de gêneros
+            int genreIndex = -1;
+            for (int i = 0; i < genreCount; i++) {
+                if (strcmp(genres[i].nome, genero) == 0) {
+                    genreIndex = i;
+                    break;
+                }
+            }
+            if (genreIndex == -1) {
+                strcpy(genres[genreCount].nome, genero);
+                genres[genreCount].count = 1;
+                genreCount++;
+            } else {
+                genres[genreIndex].count++;
+            }
+
+            // Contagem de plataformas
+            int platformIndex = -1;
+            for (int i = 0; i < platformCount; i++) {
+                if (strcmp(platforms[i].nome, plataforma) == 0) {
+                    platformIndex = i;
+                    break;
+                }
+            }
+            if (platformIndex == -1) {
+                strcpy(platforms[platformCount].nome, plataforma);
+                platforms[platformCount].count = 1;
+                platformCount++;
+            } else {
+                platforms[platformIndex].count++;
+            }
         }
     }
 
@@ -302,22 +333,36 @@ void mostrarEstatisticasDoUsuario(FILE *estatisticas, char *login) {
     // Exibe as estatísticas
     printf("Estatisticas do Usuario: %s\n", login);
     printf("Tempo total de uso: %02d:%02d:%02d\n", totalHours, totalMinutes, finalSeconds);
-    
-	if (maxGenreCount > 0) {
-        printf("Genero mais assistido: %s\n", mostUsedGenre);
+
+    // Encontra o gênero mais assistido
+    if (genreCount > 0) {
+        int maxGenreIndex = 0;
+        for (int i = 1; i < genreCount; i++) {
+            if (genres[i].count > genres[maxGenreIndex].count) {
+                maxGenreIndex = i;
+            }
+        }
+        printf("Genero mais assistido: %s\n", genres[maxGenreIndex].nome);
     } else {
         printf("Nenhum genero registrado.\n");
     }
-    if (maxPlatformCount > 0) {
-        printf("Plataforma mais usada: %s\n", mostUsedPlatform);
+
+    // Encontra a plataforma mais usada
+    if (platformCount > 0) {
+        int maxPlatformIndex = 0;
+        for (int i = 1; i < platformCount; i++) {
+            if (platforms[i].count > platforms[maxPlatformIndex].count) {
+                maxPlatformIndex = i;
+            }
+        }
+        printf("Plataforma mais usada: %s\n", platforms[maxPlatformIndex].nome);
     } else {
         printf("Nenhuma plataforma registrada.\n");
     }
-
 }
 
-Filme *inicio = NULL;
 
+Filme *inicio = NULL;
 void sugerirFilme(FILE *portfolio, char *login) {
     if (!portfolio || !login) {
         printf("Erro: Erro ao abrir o arquivo, ou login invalido.\n");

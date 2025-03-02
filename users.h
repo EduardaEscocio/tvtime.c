@@ -8,6 +8,8 @@
 #define PASSWORD_LENGTH 50
 #define NAME_LENGTH 50
 #define LINE_LENGTH 256
+#define MAX_GENRES 50
+#define MAX_PLATFORMS 50
 
 typedef struct usuario{
     char login[LOGIN_LENGTH];
@@ -21,6 +23,16 @@ typedef struct estatisticas {
     int horasTotais;
     int minutosTotais;
 } Estatisticas;
+
+typedef struct genreCount{
+    char nome[50];
+    int count;
+} GenreCount;
+
+typedef struct platformCount{
+    char nome[50];
+    int count;
+} PlatformCount;
 
 void cadastro(FILE *usuarios); //
 char *login(FILE *usuarios); //
